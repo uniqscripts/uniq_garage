@@ -1,7 +1,12 @@
-currently doesnt work:
+Currently doesnt work:
 - impound system
 - editing style
 - qb-core & qbox
+
+Dependency:
+- oxmysql
+- ox_lib
+- esx/qb/qbox
 
 Features:
 - purchasable garage
