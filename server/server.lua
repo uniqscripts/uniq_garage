@@ -279,8 +279,6 @@ end)
 
 
 AddEventHandler('playerDropped', function()
-	server.playerDropped(source)
-
 	if GetNumPlayerIndices() == 0 then
 		saveToDB()
 	end
