@@ -7,7 +7,8 @@ local General = lib.load('config.general')
 local ScaleForm = require 'client.carscaleform'
 local TempVehicle = {}
 local Garage = {}
-local hasTextUI, CurrentFloor, CurrentGarageName, inPreview
+local hasTextUI, CurrentGarageName, inPreview
+local CurrentFloor = 'exit'
 
 local function format_number(n)
     local formatted = tostring(n):reverse():gsub("(%d%d%d)", "%1,"):reverse()
@@ -47,6 +48,7 @@ function Garage.CreateOwnedVehicles(name)
 
                 -- FreezeEntityPosition(vehicle, true)
                 lib.setVehicleProperties(vehicle, vehicles[plate])
+                Edit.GiveCarKey(vehicle, plate)
 
                 TempVehicle[#TempVehicle + 1] = vehicle
             end
@@ -155,7 +157,7 @@ function Garage.CreateFloor(name)
     Garage.DeleteVehicles()
 
     if table.type(GarageStyle) ~= 'empty' then
-        if GaragesData[name].DeactivateInterio then GaragesData[name].DeactivateInterior() end
+        if GaragesData[name].DeactivateInterior then print 'da' GaragesData[name].DeactivateInterior() end
 
         for i = 1, #GarageStyle[CurrentFloor] do
             local style = GarageStyle[CurrentFloor][i]
@@ -356,13 +358,27 @@ function Garage.SetPlayerInGarage(name, floor)
     Garage.CreateFloor(name)
 end
 
+local keybind = lib.addKeybind({
+    name = 'take_vehicle_out',
+    description = 'Press E to take vehicle out',
+    defaultKey = 'E',
+    onReleased = function(self)
+        local plate = GetVehicleNumberPlateText(cache.vehicle)
+
+        CurrentFloor = 'exit'
+        lib.hideTextUI()
+        TriggerServerEvent('uniq_garage:server:TakeVehicleOut', CurrentGarageName, plate)
+        self:disable(true)
+    end
+})
+
+keybind:disable(true)
+
 RegisterNetEvent('uniq_garage:client:TakeVehicleOut', function(name, mods)
     if source == '' then return end
 
     lib.requestModel(mods.model)
     local coords = GaragesData[name].vehicleSpawnPoint
-
-    CurrentFloor = 'exit'
 
     DoScreenFadeOut(750)
     Garage.AwaitFadeOut()
@@ -395,37 +411,15 @@ AddEventHandler('onResourceStop', function(resource)
 end)
 
 RegisterCommand('getint', function (source, args, raw)
-    -- local coords = GetEntityCoords(cache.ped)
-    -- local x = GetInteriorAtCoords(coords.x, coords.y, coords.z)
-
-    -- print(x)
-    -- lib.setClipboard(x)
+   print(json.encode(keybind.disabled, { indent = true }))
 end)
 
-local keybind = lib.addKeybind({
-    name = 'take_vehicle_out',
-    description = 'Press E to take vehicle out',
-    defaultKey = 'E',
-    onReleased = function(self)
-        local plate = GetVehicleNumberPlateText(cache.vehicle)
-
-        TriggerServerEvent('uniq_garage:server:TakeVehicleOut', CurrentGarageName, plate)
-        lib.hideTextUI()
-        self:disable(true)
-    end
-})
-
-keybind:disable(true)
-
 lib.onCache('vehicle', function(value)
-    if not CurrentFloor then return end
+    if CurrentFloor == 'exit' then return end
 
     if type(value) == "number" then
         keybind:disable(false)
         lib.showTextUI('[E] - take out')
-    else
-        keybind:disable(true)
-        lib.hideTextUI()
     end
 end)
 
