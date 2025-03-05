@@ -3,7 +3,7 @@ if not lib then return end
 local Framework = require(('bridge.%s.server'):format(Shared.framework))
 local Function = {}
 
-function Function.BuyGarage(playerId, price)
+function Function.PayPrice(playerId, price)
     if Shared.esx then
         local xPlayer = Framework.Export.GetPlayerFromId(playerId)
 

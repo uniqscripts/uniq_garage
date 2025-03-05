@@ -1,9 +1,9 @@
 if not lib then return end
 
+local db = require(('bridge.%s.owned_vehicles'):format(Shared.framework))
 local Framework = require(('bridge.%s.server'):format(Shared.framework))
 local GaragesData = lib.load 'config.garages'
 local utils = require 'server.functions'
-local db = require 'server.db'
 local Garages = {}
 local PlayerVehicles = {}
 
@@ -58,7 +58,7 @@ RegisterNetEvent('uniq_garage:server:BuyGarage', function(garage)
     local price = GaragesData[garage].price
     local identifier = Framework.GetIdentifier(src)
 
-    if utils.BuyGarage(src, price) then
+    if utils.PayPrice(src, price) then
         if not Garages[identifier] then
             Garages[identifier] = {}
         end
@@ -263,4 +263,25 @@ SetInterval(saveToDB, 600000)
 
 AddEventHandler('onResourceStop', function(resource)
     if resource == cache.resource then saveToDB() end
+end)
+
+
+AddEventHandler('txAdmin:events:serverShuttingDown', function()
+	saveToDB()
+end)
+
+
+AddEventHandler('txAdmin:events:scheduledRestart', function(eventData)
+    if eventData.secondsRemaining ~= 60 then return end
+
+	saveToDB()
+end)
+
+
+AddEventHandler('playerDropped', function()
+	server.playerDropped(source)
+
+	if GetNumPlayerIndices() == 0 then
+		saveToDB()
+	end
 end)

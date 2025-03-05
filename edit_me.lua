@@ -6,7 +6,9 @@ end
 
 
 function Edit.GiveCarKey(vehicle, plate)
-
+    if Shared.qb then
+        TriggerEvent('vehiclekeys:client:SetOwner', plate)
+    end
 end
 
 
