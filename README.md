@@ -1,7 +1,6 @@
 Currently doesnt work:
 - impound system
 - editing style
-- qb-core & qbox
 
 Dependency:
 - oxmysql
