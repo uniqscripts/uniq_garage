@@ -1,3 +1,5 @@
+if not lib then return end
+
 local QBCore = exports[Shared.framework]:GetCoreObject()
 local PlayerData = {}
 

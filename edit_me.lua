@@ -1,3 +1,5 @@
+if not lib then return end
+
 local Edit = {}
 
 function Edit.SetFuel(vehicle, fuel)

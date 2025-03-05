@@ -1,3 +1,5 @@
+if not lib then return end
+
 -- all credits to: https://gist.github.com/ihyajb/3c518c56b3c5b2dd63e96b91e93f3277
 
 local VehicleNames = lib.load('config.vehicles')

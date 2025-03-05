@@ -1,3 +1,5 @@
+if not lib then return end
+
 local Framework = {
     Export = exports[Shared.framework]:GetCoreObject()
 }

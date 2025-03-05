@@ -1,3 +1,5 @@
+if not lib then return end
+
 local db = {}
 
 function db.GetVehicleOwner(plate)

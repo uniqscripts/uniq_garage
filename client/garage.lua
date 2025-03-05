@@ -1,6 +1,5 @@
 if not lib then return end
 
-
 local Edit = lib.load('edit_me')
 local GaragesData = lib.load('config.garages')
 local General = lib.load('config.general')
@@ -157,7 +156,7 @@ function Garage.CreateFloor(name)
     Garage.DeleteVehicles()
 
     if table.type(GarageStyle) ~= 'empty' then
-        if GaragesData[name].DeactivateInterior then print 'da' GaragesData[name].DeactivateInterior() end
+        if GaragesData[name].DeactivateInterior then GaragesData[name].DeactivateInterior() end
 
         for i = 1, #GarageStyle[CurrentFloor] do
             local style = GarageStyle[CurrentFloor][i]

@@ -1,3 +1,5 @@
+if not lib then return end
+
 local PlayerData = {}
 local ESX = exports[Shared.framework]:getSharedObject()
 
