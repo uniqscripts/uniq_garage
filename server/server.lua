@@ -258,6 +258,11 @@ local function saveToDB()
 end
 
 
+exports('DoesPlayerOwnGarage', function(identifier)
+    return Garages[identifier]
+end)
+
+
 SetInterval(saveToDB, 600000)
 
 

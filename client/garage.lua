@@ -214,7 +214,7 @@ function Garage.ExitGarage(name)
 
         Garage.AwaitFadeIn()
         Garage.DeleteVehicles()
-        TriggerServerEvent('uniq_garage:server:ExitGarage', name)
+        TriggerServerEvent('uniq_garage:server:ExitGarage')
         if inPreview then inPreview = nil end
     else
         Garage.CreateFloor(name)
@@ -244,6 +244,7 @@ function Garage.NearbyExit(point)
 end
 
 
+local PreviousSelected = nil
 function Garage.CreateCutomizationMenu(garage)
     if not GaragesData[garage] then return end
 
@@ -269,8 +270,11 @@ function Garage.CreateCutomizationMenu(garage)
             options = {}
 
             for numb, data in pairs(GaragesData[garage].EntitySets.Purchasable[args.style]) do
-                options[#options + 1] = { label = data.label, description = ('Price €%s'):format(data.price), args = { style = data.style, color = data.iscolor or nil } }
+                options[#options + 1] = { label = data.label, description = ('Price €%s'):format(data.price), args = { style = data.style, color = data.color or nil } }
             end
+
+
+            PreviousSelected = options[1].args.style
 
             lib.registerMenu({
                 id = 'uniq_garage:customization:sub',
@@ -278,16 +282,27 @@ function Garage.CreateCutomizationMenu(garage)
                 position = 'top-right',
                 options = options,
                 onSelected = function(selected2, secondary2, args2)
-                    GaragesData[garage].DeactivateInterior()
+                    -- GaragesData[garage].DeactivateInterior()
 
-                    if not IsInteriorEntitySetActive(GaragesData[garage].interiorId, args2.style) and not args2.iscolor then
-                        ActivateInteriorEntitySet(GaragesData[garage].interiorId, args2.style)
+                    if PreviousSelected then
+                        if IsInteriorEntitySetActive(GaragesData[garage].interiorId, PreviousSelected) then
+                            DeactivateInteriorEntitySet(GaragesData[garage].interiorId, PreviousSelected)
+                        end
                     end
 
-                    if args2.iscolor then
-                        SetInteriorEntitySetColor(GaragesData[garage].interiorId, 'entity_set_shell_01', args2.style)
+                    if args2.color then
+                        if not IsInteriorEntitySetActive(GaragesData[garage].interiorId, args2.style) then
+                            ActivateInteriorEntitySet(GaragesData[garage].interiorId, args2.style)
+                        end
+
+                        SetInteriorEntitySetColor(GaragesData[garage].interiorId, args2.style, selected2)
+                    else
+                        if not IsInteriorEntitySetActive(GaragesData[garage].interiorId, args2.style) then
+                            ActivateInteriorEntitySet(GaragesData[garage].interiorId, args2.style)
+                        end
                     end
 
+                    PreviousSelected = args2.style
                     RefreshInterior(GaragesData[garage].interiorId)
                 end,
                 onClose = function(keyPressed2)
@@ -410,7 +425,10 @@ AddEventHandler('onResourceStop', function(resource)
 end)
 
 RegisterCommand('getint', function (source, args, raw)
-   print(json.encode(keybind.disabled, { indent = true }))
+   local coors = GetEntityCoords(cache.ped)
+   local int = GetInteriorAtCoords(coors.x, coors.y, coors.z)
+
+   print(json.encode(int, { indent = true }))
 end)
 
 lib.onCache('vehicle', function(value)
