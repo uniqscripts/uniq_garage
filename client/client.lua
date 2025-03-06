@@ -2,7 +2,7 @@ if not lib then return end
 
 require(('bridge.%s.client'):format(Shared.framework))
 
-local Edit = lib.load('edit_me')
+local Edit = require 'edit_me'
 local GaragesData = lib.load('config.garages')
 local General = lib.load('config.general')
 local Garage = require 'client.garage'
@@ -56,6 +56,7 @@ local function nearbyEnter(point)
             if cache.vehicle then
                 return Edit.Notify('Leave vehicle first')
             end
+
             Garage.OpenGarageMenu(point.garage)
             hasTextUI = nil
             lib.hideTextUI()
@@ -89,11 +90,11 @@ function CreateGarages()
             garage = k
         })
 
-        if v.editMenu then
+        if v.customizationMenu then
             local edit = lib.points.new({
-                coords = v.editMenu,
+                coords = v.customizationMenu,
                 distance = 20.0,
-                nearby = Garage.NearbyEditMenu,
+                nearby = Garage.NearbyCustomization,
                 garage = k
             })
 

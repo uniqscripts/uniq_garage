@@ -1,6 +1,6 @@
 if not lib then return end
 
-local Edit = lib.load('edit_me')
+local Edit = require 'edit_me'
 local GaragesData = lib.load('config.garages')
 local General = lib.load('config.general')
 local ScaleForm = require 'client.carscaleform'
@@ -99,7 +99,15 @@ function Garage.OpenGarageMenu(name)
             { title = 'Sell Garage', arrow = true }
         } or {
             { title = 'Preview', arrow = true, onSelect = function() Garage.PreviewGarage(name) end },
-            { title = 'Buy Garage', description = ('Buy for €%s'):format(format_number(GaragesData[name].price)), arrow = true, metadata = { GaragesData[name].GarageInfo }, onSelect = function() TriggerServerEvent('uniq_garage:server:BuyGarage', name) end }
+            {
+                title = 'Buy Garage',
+                description = ('Buy for €%s'):format(format_number(GaragesData[name].price)),
+                arrow = true,
+                metadata = { GaragesData[name].GarageInfo },
+                onSelect = function()
+                    TriggerServerEvent('uniq_garage:server:BuyGarage', name)
+                end
+            }
         }
     }
 
@@ -110,23 +118,23 @@ end
 function Garage.GeneratePreviewCar(name)
     if not GaragesData[name] then return end
 
-    local model = `t20`
-    lib.requestModel(model)
-
     for i = 1, #GaragesData[name].Vehicles[1] do
-        local coords = GaragesData[name].Vehicles[1][i]
-        local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, coords.w, false, false)
+        local model = joaat(General.PreviewModels[math.random(#General.PreviewModels)])
 
-        for _ = 1, 10 do
-            SetVehicleOnGroundProperly(vehicle)
-            Wait(0)
+        if IsModelInCdimage(model) then
+            lib.requestModel(model)
+            local coords = GaragesData[name].Vehicles[1][i]
+            local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, coords.w, false, false)
+
+            for _ = 1, 10 do
+                SetVehicleOnGroundProperly(vehicle)
+                Wait(0)
+            end
+
+            SetVehicleDoorsLocked(vehicle, 2)
+
+            TempVehicle[#TempVehicle + 1] = vehicle
         end
-
-        SetEntityAlpha(vehicle, 153, false)
-        SetVehicleDoorsLocked(vehicle, 2)
-
-        TempVehicle[#TempVehicle + 1] = vehicle
-        Wait(0)
     end
 end
 
@@ -144,36 +152,43 @@ function Garage.DeleteVehicles()
     end
 end
 
-function Garage.CreateFloor(name)
-    if not GaragesData[name] then return end
-    local GarageStyle = lib.callback.await('uniq_garage:cb:GetStyle', 100, name)
-    CurrentGarageName = name
 
-    TriggerServerEvent('uniq_garage:server:EnterGarage', name, CurrentFloor)
-    DoScreenFadeOut(750)
-
-    Garage.AwaitFadeOut()
-    Garage.DeleteVehicles()
+function Garage.CreateCustmozations(name)
+    local GarageStyle = lib.callback.await('uniq_garage:cb:GetStyle', 100, name, CurrentFloor)
 
     if table.type(GarageStyle) ~= 'empty' then
-        if GaragesData[name].DeactivateInterior then GaragesData[name].DeactivateInterior() end
+        if GaragesData[name].Customization.DeactivateInterior then GaragesData[name].Customization.DeactivateInterior() end
 
-        for i = 1, #GarageStyle[CurrentFloor] do
-            local style = GarageStyle[CurrentFloor][i]
-            local lastStyle
+        for _, customization in pairs(GarageStyle) do
+            if type(customization) == "table" then
+                if customization.color then
+                    if not IsInteriorEntitySetActive(GaragesData[name].interiorId, customization.entity) then
+                        ActivateInteriorEntitySet(GaragesData[name].interiorId, customization.entity)
+                    end
 
-            if type(style) ~= "number" then
-                if not IsInteriorEntitySetActive(GaragesData[name].interiorId, style) then
-                    ActivateInteriorEntitySet(GaragesData[name].interiorId, style)
-                    lastStyle = style
+                    SetInteriorEntitySetColor(GaragesData[name].interiorId, customization.entity, customization.color)
                 end
             else
-                SetInteriorEntitySetColor(GaragesData[name].interiorId, lastStyle, style)
+                if not IsInteriorEntitySetActive(GaragesData[name].interiorId, customization) then
+                    ActivateInteriorEntitySet(GaragesData[name].interiorId, customization)
+                end
             end
         end
 
         RefreshInterior(GaragesData[name].interiorId)
     end
+end
+
+function Garage.CreateFloor(name)
+    if not GaragesData[name] then return end
+
+    TriggerServerEvent('uniq_garage:server:EnterGarage', name, CurrentFloor, false)
+    DoScreenFadeOut(750)
+
+    Garage.AwaitFadeOut()
+    Garage.DeleteVehicles()
+
+    Garage.CreateCustmozations(name)
 
     SetEntityCoords(cache.ped, GaragesData[name].insideSpawn.x, GaragesData[name].insideSpawn.y, GaragesData[name].insideSpawn.z, false, false, false, false)
     SetEntityHeading(cache.ped, GaragesData[name].insideSpawn.w)
@@ -215,7 +230,13 @@ function Garage.ExitGarage(name)
         Garage.AwaitFadeIn()
         Garage.DeleteVehicles()
         TriggerServerEvent('uniq_garage:server:ExitGarage')
-        if inPreview then inPreview = nil end
+        
+        if inPreview then
+            inPreview = nil
+            if GaragesData[name].Customization and GaragesData[name].Customization.DeactivateInterior then
+                GaragesData[name].Customization.DeactivateInterior()
+            end
+        end
     else
         Garage.CreateFloor(name)
     end
@@ -250,7 +271,7 @@ function Garage.CreateCutomizationMenu(garage)
 
     local options = {}
 
-    for name, style in pairs(GaragesData[garage].EntitySets.Purchasable) do
+    for name, style in pairs(GaragesData[garage].Customization.Purchasable) do
         options[#options + 1] = { label = name, args = { style = name }, description = ('Total %s options'):format(#style) }
     end
 
@@ -260,19 +281,17 @@ function Garage.CreateCutomizationMenu(garage)
         position = 'top-right',
         options = options,
         onClose = function(keyPressed)
-            print('Menu closed')
-            if keyPressed then
-                print(('Pressed %s to close the menu'):format(keyPressed))
-            end
+            if inPreview == true then return end
+
+            -- load purchased
         end,
     }, function (selected, scrollIndex, args, checked)
-        if GaragesData[garage].EntitySets.Purchasable[args.style] then
+        if GaragesData[garage].Customization.Purchasable[args.style] then
             options = {}
 
-            for numb, data in pairs(GaragesData[garage].EntitySets.Purchasable[args.style]) do
-                options[#options + 1] = { label = data.label, description = ('Price €%s'):format(data.price), args = { style = data.style, color = data.color or nil } }
+            for numb, data in pairs(GaragesData[garage].Customization.Purchasable[args.style]) do
+                options[#options + 1] = { label = data.label, description = ('Price €%s'):format(data.price), args = { style = data.style, color = data.color or nil, type = data.type } }
             end
-
 
             PreviousSelected = options[1].args.style
 
@@ -282,8 +301,6 @@ function Garage.CreateCutomizationMenu(garage)
                 position = 'top-right',
                 options = options,
                 onSelected = function(selected2, secondary2, args2)
-                    -- GaragesData[garage].DeactivateInterior()
-
                     if PreviousSelected then
                         if IsInteriorEntitySetActive(GaragesData[garage].interiorId, PreviousSelected) then
                             DeactivateInteriorEntitySet(GaragesData[garage].interiorId, PreviousSelected)
@@ -306,10 +323,17 @@ function Garage.CreateCutomizationMenu(garage)
                     RefreshInterior(GaragesData[garage].interiorId)
                 end,
                 onClose = function(keyPressed2)
-
+                    if inPreview == true then return end
+                    Garage.CreateCustmozations(garage)
                 end,
             }, function (selected2, scrollIndex2, args2, checked2)
+                if inPreview == true then return end
 
+                local cb = lib.callback.await('uniq_garage:cb:BuyCustomization', false, garage, CurrentFloor, args2, args2.color and selected2 or nil)
+
+                if not cb then
+                    Garage.CreateCustmozations(garage)
+                end
             end)
 
             lib.showMenu('uniq_garage:customization:sub')
@@ -320,9 +344,9 @@ function Garage.CreateCutomizationMenu(garage)
 end
 
 
-function Garage.NearbyEditMenu(point)
+function Garage.NearbyCustomization(point)
     ---@diagnostic disable-next-line: param-type-mismatch
-    DrawMarker(General.Markers.EditMenu.id, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, General.Markers.EditMenu.scaleX, General.Markers.EditMenu.scaleY, General.Markers.EditMenu.scaleZ, General.Markers.EditMenu.red, General.Markers.EditMenu.green, General.Markers.EditMenu.blue, 222, false, false, 0, true, false, false, false)
+    DrawMarker(General.Markers.CustomizationMenu.id, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, General.Markers.CustomizationMenu.scaleX, General.Markers.CustomizationMenu.scaleY, General.Markers.CustomizationMenu.scaleZ, General.Markers.CustomizationMenu.red, General.Markers.CustomizationMenu.green, General.Markers.CustomizationMenu.blue, 222, false, false, 0, true, false, false, false)
 
     if point.isClosest and point.currentDistance < 1.2 then
         if not hasTextUI then
@@ -344,12 +368,13 @@ end
 
 function Garage.PreviewGarage(name)
     if not GaragesData[name] then return end
-    if cache.vehicle then
-        return Edit.Notify('Leave vehicle first')
-    end
 
     if not IsIplActive(GaragesData[name].ipl) then
         RequestIpl(GaragesData[name].ipl)
+    end
+
+    if GaragesData[name].Customization and GaragesData[name].Customization.LoadDefault then
+        GaragesData[name].Customization.LoadDefault()
     end
 
     DoScreenFadeOut(750)
@@ -361,15 +386,28 @@ function Garage.PreviewGarage(name)
     DoScreenFadeIn(500)
     Garage.AwaitFadeIn()
     inPreview = true
+    CurrentFloor = 1
+    TriggerServerEvent('uniq_garage:server:EnterGarage', name, CurrentFloor, true)
 end
 
-function Garage.SetPlayerInGarage(name, floor)
+function Garage.SetPlayerInGarage(name, floor, inpreview)
     if not GaragesData[name] then return end
 
     CurrentGarageName = name
     CurrentFloor = floor
+
+    if inpreview == true then
+        inPreview = true
+        CurrentFloor = 'exit'
+
+        if GaragesData[name].Customization and GaragesData[name].Customization.LoadDefault then
+            GaragesData[name].Customization.LoadDefault()
+        end
+    else
+        Garage.CreateFloor(name)
+    end
+
     TriggerServerEvent('uniq_garage:server:UpdateBucket')
-    Garage.CreateFloor(name)
 end
 
 local keybind = lib.addKeybind({
@@ -377,6 +415,7 @@ local keybind = lib.addKeybind({
     description = 'Press E to take vehicle out',
     defaultKey = 'E',
     onReleased = function(self)
+        if inPreview == true then return end
         local plate = GetVehicleNumberPlateText(cache.vehicle)
 
         CurrentFloor = 'exit'
@@ -419,6 +458,13 @@ end)
 
 AddEventHandler('onResourceStop', function(resource)
     if resource == cache.resource then
+        if inPreview and CurrentGarageName then
+            print(json.encode(CurrentGarageName, { indent = true }))
+            if GaragesData[CurrentGarageName].Customization.DeactivateInterior then
+                GaragesData[CurrentGarageName].Customization.DeactivateInterior()
+            end
+        end
+
         Garage.DeleteVehicles()
         lib.hideTextUI()
     end
@@ -440,5 +486,17 @@ lib.onCache('vehicle', function(value)
     end
 end)
 
+
+AddEventHandler('onResourceStart', function(resource)
+    if cache.resource == resource then
+        for i = 1, #General.PreviewModels do
+            local model = joaat(General.PreviewModels[i])
+            
+            if not IsModelInCdimage(model) then
+                warn(('%s is not valid model or not part of your game build'):format(General.PreviewModels[i]))
+            end
+        end
+    end
+end)
 
 return Garage

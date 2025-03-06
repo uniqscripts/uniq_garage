@@ -8,19 +8,19 @@ function Framework.GetIdentifier(playerId)
     return Framework.Export.GetPlayerFromId(playerId)?.identifier
 end
 
-function Framework.SetMetadata(playerId, name, floor)
+function Framework.SetMetadata(playerId, key, val)
     local xPlayer = Framework.Export.GetPlayerFromId(playerId)
 
     if xPlayer then
-        xPlayer.setMeta('garage', { garage = name, floor = floor })
+        xPlayer.setMeta(key, val)
     end
 end
 
-function Framework.ClearMeta(playerId)
+function Framework.ClearMeta(playerId, key, val)
     local xPlayer = Framework.Export.GetPlayerFromId(playerId)
 
     if xPlayer then
-        xPlayer.clearMeta('garage')
+        xPlayer.clearMeta(key)
     end
 end
 

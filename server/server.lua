@@ -3,6 +3,7 @@ if not lib then return end
 local db = require(('bridge.%s.owned_vehicles'):format(Shared.framework))
 local Framework = require(('bridge.%s.server'):format(Shared.framework))
 local GaragesData = lib.load 'config.garages'
+local PreviewModels = lib.load('config.general').PreviewModels
 local utils = require 'server.functions'
 local Garages = {}
 local PlayerVehicles = {}
@@ -68,16 +69,89 @@ RegisterNetEvent('uniq_garage:server:BuyGarage', function(garage)
         end
 
         Garages[identifier][garage].name = garage
-        Garages[identifier][garage].style = GaragesData[garage].EntitySets and GaragesData[garage].EntitySets.Default or nil
+        Garages[identifier][garage].style = GaragesData[garage].Customization and GaragesData[garage].Customization.Default or {}
         Garages[identifier][garage].slot = {}
 
         MySQL.insert('INSERT INTO `uniq_garage` (owner, name, data) VALUES (?, ?, ?)', { identifier, garage, json.encode(Garages[identifier][garage]) })
 
         TriggerClientEvent('uniq_garage:Notify', src, ('Successfully purchased %s'):format(garage), 'success')
-        return
+    else
+        TriggerClientEvent('uniq_garage:Notify', src, 'You dont have enough money', 'error')
+    end
+end)
+
+RegisterNetEvent('uniq_garage:server:BuyCustomization', function(name, floor, data, color)
+    local src = source
+    local identifier = Framework.GetIdentifier(src)
+
+    if Garages[identifier] and Garages[identifier][name] then
+        if data.color and Garages[identifier][name].style[floor].color.color == color or Garages[identifier][name].style[floor][data.type] == data.style then
+            TriggerClientEvent('uniq_garage:Notify', src, 'You already have this customization', 'error')
+            return
+        end
+
+        local price
+
+        for k,v in pairs(GaragesData[name].Customization.Purchasable) do
+            for kk, vv in pairs(v) do
+                if vv.style == data.style then
+                    price = vv.price
+                    break
+                end
+            end
+        end
+
+        if type(price) == "number" then
+            if utils.PayPrice(src, price) then
+                if data.color then
+                    Garages[identifier][name].style[floor].color.color = color
+                else
+                    Garages[identifier][name].style[floor][data.type] = data.style
+                end
+            else
+                TriggerClientEvent('uniq_garage:Notify', src, 'You dont have enough money', 'error')
+            end
+        end
+    end
+end)
+
+
+lib.callback.register('uniq_garage:cb:BuyCustomization', function(source, name, floor, data, color)
+    local identifier = Framework.GetIdentifier(source)
+
+    if Garages[identifier] and Garages[identifier][name] then
+        if data.color and Garages[identifier][name].style[floor].color.color == color or Garages[identifier][name].style[floor][data.type] == data.style then
+            TriggerClientEvent('uniq_garage:Notify', source, 'You already have this customization', 'error')
+            return false
+        end
+
+        local price
+
+        for k,v in pairs(GaragesData[name].Customization.Purchasable) do
+            for kk, vv in pairs(v) do
+                if vv.style == data.style then
+                    price = vv.price
+                    break
+                end
+            end
+        end
+
+        if type(price) == "number" then
+            if utils.PayPrice(source, price) then
+                if data.color then
+                    Garages[identifier][name].style[floor].color.color = color
+                else
+                    Garages[identifier][name].style[floor][data.type] = data.style
+                end
+
+                return true
+            else
+                TriggerClientEvent('uniq_garage:Notify', source, 'You dont have enough money', 'error')
+            end
+        end
     end
 
-    TriggerClientEvent('uniq_garage:Notify', src, 'You dont have enough money', 'error')
+    return false
 end)
 
 
@@ -134,7 +208,7 @@ RegisterNetEvent('uniq_garage:server:TakeVehicleOut', function(name, plate, type
 
     if Garages[identifier][name].slot[floor] and Garages[identifier][name].slot[floor][slot] then
         SetPlayerRoutingBucket(src, 0)
-        Framework.ClearMeta(src)
+        Framework.ClearMeta(src, 'garage', nil)
 
         TriggerClientEvent('uniq_garage:client:TakeVehicleOut', src, name, PlayerVehicles[identifier][name][plate])
 
@@ -194,10 +268,10 @@ lib.callback.register('uniq_garage:cb:CanStore', function(source, garage, plate,
 end)
 
 
-lib.callback.register('uniq_garage:cb:GetStyle', function(source, garage)
+lib.callback.register('uniq_garage:cb:GetStyle', function(source, garage, floor)
     local identifier = Framework.GetIdentifier(source)
 
-    return Garages[identifier][garage].style or {}
+    return Garages[identifier][garage].style?[floor] or {}
 end)
 
 
@@ -224,11 +298,11 @@ lib.callback.register('uniq_garage:cb:GetGarageVehicles', function(source, garag
 end)
 
 
-RegisterNetEvent('uniq_garage:server:EnterGarage', function(garage, floor)
+RegisterNetEvent('uniq_garage:server:EnterGarage', function(garage, floor, inPreview)
     local playerId = source
 
     SetPlayerRoutingBucket(playerId, playerId)
-    Framework.SetMetadata(playerId, garage, floor)
+    Framework.SetMetadata(playerId, 'garage', { garage = garage, floor = floor, inPreview = inPreview and true or nil })
 end)
 
 
@@ -236,7 +310,7 @@ RegisterNetEvent('uniq_garage:server:ExitGarage', function(garage)
     local playerId = source
 
     SetPlayerRoutingBucket(playerId, 0)
-    Framework.ClearMeta(playerId)
+    Framework.ClearMeta(playerId, 'garage', nil)
 end)
 
 

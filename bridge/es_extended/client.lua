@@ -11,10 +11,10 @@ RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
 	PlayerData = xPlayer
 	PlayerLoaded = true
-	while not PlayerLoaded do Wait(250) end
+	
 	CreateGarages()
     if PlayerData.metadata.garage then
-        SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor)
+        SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor, PlayerData.metadata.garage.inPreview)
     end
 end)
 
@@ -34,7 +34,7 @@ AddEventHandler('onResourceStart', function(resource)
         CreateGarages()
 
         if PlayerData.metadata.garage then
-            SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor)
+            SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor, PlayerData.metadata.garage.inPreview)
         end
     end
 end)

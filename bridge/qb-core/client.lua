@@ -12,6 +12,9 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 
     Wait(1000)
     CreateGarages()
+    if PlayerData.metadata.garage then
+        SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor, PlayerData.metadata.garage.inPreview)
+    end
 end)
 
 RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
@@ -34,7 +37,7 @@ AddEventHandler('onResourceStart', function(resource)
         CreateGarages()
 
         if PlayerData.metadata.garage then
-            SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor)
+            SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor, PlayerData.metadata.garage.inPreview)
         end
     end
 end)
