@@ -10,7 +10,6 @@ local Garages = {
         price = 34000,
         blip = { id = 357, colour = 3, scale = 0.9 },
         blackListClass = { 14, 15, 16, 19, 21 },
-        hasMultipleFloors = false,
         Vehicles = {
             [1] = {
                 vec4(175.005, -1003.545, -99.412, 180.654),
@@ -30,7 +29,6 @@ local Garages = {
         price = 80000,
         blip = { id = 357, colour = 3, scale = 0.9 },
         blackListClass = { 14, 15, 16, 19, 21 },
-        hasMultipleFloors = false,
         Vehicles = {
             [1] = {
                 vec4(194.272, -998.072, -99.412, 180.659),
@@ -54,7 +52,6 @@ local Garages = {
         price = 77500,
         blip = { id = 357, colour = 3, scale = 0.9 },
         blackListClass = { 14, 15, 16, 19, 21 },
-        hasMultipleFloors = false,
         Vehicles = {
             [1] = {
                 vec4(194.272, -998.072, -99.412, 180.659),
@@ -78,7 +75,6 @@ local Garages = {
         price = 72500,
         blip = { id = 357, colour = 3, scale = 0.9 },
         blackListClass = { 14, 15, 16, 19, 21 },
-        hasMultipleFloors = false,
         Vehicles = {
             [1] = {
                 vec4(194.272, -998.072, -99.412, 180.659),
@@ -102,7 +98,6 @@ local Garages = {
         price = 65000,
         blip = { id = 357, colour = 3, scale = 0.9 },
         blackListClass = { 14, 15, 16, 19, 21 },
-        hasMultipleFloors = false,
         Vehicles = {
             [1] = {
                 vec4(194.272, -998.072, -99.412, 180.659),
@@ -129,7 +124,6 @@ local Garages = {
         price = 2745000,
         blip = { id = 357, colour = 3, scale = 0.9 },
         blackListClass = { 14, 15, 16, 19, 21 },
-        hasMultipleFloors = false,
         Customization = {
             Purchasable = {
                 ['Interior'] = {
@@ -341,7 +335,6 @@ local Garages = {
                 RefreshInterior(interiorId)
             end
         },
-        hasMultipleFloors = true,
         Vehicles = {
             [1] = { -- floor
                 vec4(523.858, -2633.473, -49.420, 68.767),

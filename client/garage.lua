@@ -70,7 +70,9 @@ function Garage.EnterGarage(name)
         RequestIpl(GaragesData[name].ipl)
     end
 
-    if GaragesData[name].hasMultipleFloors then
+    print(json.encode(#GaragesData[name].Vehicles, { indent = true }))
+
+    if #GaragesData[name].Vehicles > 1 then
         local options = {}
 
         for i = 1, #GaragesData[name].Vehicles do
@@ -216,7 +218,7 @@ function Garage.ExitGarage()
     if not GaragesData[CurrentGarageName] then return end
     local options = {}
 
-    if GaragesData[CurrentGarageName].hasMultipleFloors and not inPreview then
+    if #GaragesData[CurrentGarageName].Vehicles > 1 and not inPreview then
         for i = 1, #GaragesData[CurrentGarageName].Vehicles do
             options[i] = { label = locale("floor_label", i), value = i }
         end
