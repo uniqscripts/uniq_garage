@@ -1,24 +1,124 @@
 local Garages = {
+
     ['Garage Innocence Boulevard' --[[ 2 car garage ]] ] = {
-        interiorId = 148737,
+        type = 'car',
+        interiorId = 149249,
         enter = vec3(-341.679, -1474.928, 30.750),
         parkVehicle = vec3(-339.623, -1464.116, 30.597),
-        insideSpawn = vec4(207.188, -999.216, -99.000, 89.841),
         vehicleSpawnPoint = vec4(-339.220, -1468.510, 30.175, 267.895),
-        price = 30000,
+        insideSpawn = vec4(178.716, -1005.483, -99.000, 92.588),
+        price = 34000,
         blip = { id = 357, colour = 3, scale = 0.9 },
-        blackListClass = { 14, 15, 16, 19, 21 }, -- https://docs.fivem.net/natives/?_0x29439776AAA00A62
+        blackListClass = { 14, 15, 16, 19, 21 },
         hasMultipleFloors = false,
         Vehicles = {
             [1] = {
-                vec4(194.384, -1000.027, -99.424, 179.924),
-                vec4(202.148, -1000.393, -99.424, 177.726)
+                vec4(175.005, -1003.545, -99.412, 180.654),
+                vec4(171.057, -1003.645, -99.410, 180.652),
             }
         },
         GarageInfo = 'Can store 2 vehicles.'
     },
 
-    ['Arcadius Business Centre Garage'] = {
+    ['0552 Roy Lowenstein Boulevard'] = {
+        type = 'car',
+        interiorId = 148737,
+        enter = vec3(496.698, -1494.373, 29.288),
+        parkVehicle = vec3(507.246, -1495.342, 28.876),
+        vehicleSpawnPoint = vec4(503.791, -1499.159, 28.877, 176.744),
+        insideSpawn = vec4(207.188, -999.216, -99.000, 89.841),
+        price = 80000,
+        blip = { id = 357, colour = 3, scale = 0.9 },
+        blackListClass = { 14, 15, 16, 19, 21 },
+        hasMultipleFloors = false,
+        Vehicles = {
+            [1] = {
+                vec4(194.272, -998.072, -99.412, 180.659),
+                vec4(198.538, -998.066, -99.410, 179.261),
+                vec4(202.644, -998.127, -99.410, 179.356),
+                vec4(194.435, -1003.745, -99.410, 179.297),
+                vec4(198.443, -1003.765, -99.410, 179.412),
+                vec4(202.531, -1003.639, -99.410, 178.618)
+            }
+        },
+        GarageInfo = 'Can store 6 vehicles.'
+    },
+
+    ['Unit 14 Popular Street'] = {
+        type = 'car',
+        interiorId = 148737,
+        enter = vec3(894.702, -896.331, 27.784),
+        parkVehicle = vec3(891.100, -891.772, 26.468),
+        vehicleSpawnPoint = vec4(889.633, -887.195, 26.350, 89.930),
+        insideSpawn = vec4(207.188, -999.216, -99.000, 89.841),
+        price = 77500,
+        blip = { id = 357, colour = 3, scale = 0.9 },
+        blackListClass = { 14, 15, 16, 19, 21 },
+        hasMultipleFloors = false,
+        Vehicles = {
+            [1] = {
+                vec4(194.272, -998.072, -99.412, 180.659),
+                vec4(198.538, -998.066, -99.410, 179.261),
+                vec4(202.644, -998.127, -99.410, 179.356),
+                vec4(194.435, -1003.745, -99.410, 179.297),
+                vec4(198.443, -1003.765, -99.410, 179.412),
+                vec4(202.531, -1003.639, -99.410, 178.618)
+            }
+        },
+        GarageInfo = 'Can store 6 vehicles.'
+    },
+
+    ['0432 Davis Avenue'] = {
+        type = 'car',
+        interiorId = 148737,
+        enter = vec3(452.586, -1593.908, 29.292),
+        parkVehicle = vec3(469.284, -1595.989, 29.260),
+        vehicleSpawnPoint = vec4(467.985, -1580.512, 28.711, 231.753),
+        insideSpawn = vec4(207.188, -999.216, -99.000, 89.841),
+        price = 72500,
+        blip = { id = 357, colour = 3, scale = 0.9 },
+        blackListClass = { 14, 15, 16, 19, 21 },
+        hasMultipleFloors = false,
+        Vehicles = {
+            [1] = {
+                vec4(194.272, -998.072, -99.412, 180.659),
+                vec4(198.538, -998.066, -99.410, 179.261),
+                vec4(202.644, -998.127, -99.410, 179.356),
+                vec4(194.435, -1003.745, -99.410, 179.297),
+                vec4(198.443, -1003.765, -99.410, 179.412),
+                vec4(202.531, -1003.639, -99.410, 178.618)
+            }
+        },
+        GarageInfo = 'Can store 6 vehicles.'
+    },
+
+    ['8754 Route 68'] = {
+        type = 'car',
+        interiorId = 148737,
+        enter = vec3(-1126.639, 2694.449, 18.800),
+        parkVehicle = vec3(-1132.753, 2697.798, 18.800),
+        vehicleSpawnPoint = vec4(-1134.554, 2693.697, 18.393, 153.034),
+        insideSpawn = vec4(207.188, -999.216, -99.000, 89.841),
+        price = 65000,
+        blip = { id = 357, colour = 3, scale = 0.9 },
+        blackListClass = { 14, 15, 16, 19, 21 },
+        hasMultipleFloors = false,
+        Vehicles = {
+            [1] = {
+                vec4(194.272, -998.072, -99.412, 180.659),
+                vec4(198.538, -998.066, -99.410, 179.261),
+                vec4(202.644, -998.127, -99.410, 179.356),
+                vec4(194.435, -1003.745, -99.410, 179.297),
+                vec4(198.443, -1003.765, -99.410, 179.412),
+                vec4(202.531, -1003.639, -99.410, 178.618)
+            }
+        },
+        GarageInfo = 'Can store 6 vehicles.'
+
+    },
+
+    ['Arcadius Business Centre Garage' --[[ hight end, 24 car ]] ] = {
+        type = 'car',
         interiorId = 253441,
         ipl = 'imp_dt1_02_cargarage_a',
         enter = vec3(-110.985, -605.060, 36.281),
@@ -154,14 +254,15 @@ local Garages = {
 
     },
 
-    ['Eclipse Boulevard Garage' --[[ 50 car garage ]]] = {
+    ['Eclipse Boulevard Garage' --[[ hight end, 50 car ]]] = {
+        type = 'car',
         interiorId = 290561,
         ipl = 'xm3_garage_fix',
         enter = vec3(-286.271, 280.641, 89.888),
         parkVehicle = vec3(-269.203, 279.701, 90.306),
         insideSpawn = vec4(528.401, -2638.002, -49.000, 97.635), -- also exit
         vehicleSpawnPoint = vec4(-272.861, 277.642, 89.620, 175.041),
-        customizationMenu = vec3(524.677, -2638.506, -49.000),
+        customizationMenu = vec3(526.233, -2609.031, -49.000),
         price = 2740000,
         blip = { id = 357, colour = 3, scale = 0.9 },
         blackListClass = { 14, 15, 16, 19, 21 }, -- https://docs.fivem.net/natives/?_0x29439776AAA00A62

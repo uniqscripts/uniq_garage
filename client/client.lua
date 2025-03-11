@@ -1,6 +1,9 @@
 if not lib then return end
 
+lib.locale()
+
 require(('bridge.%s.client'):format(Shared.framework))
+require 'client.impound'
 
 local Edit = require 'edit_me'
 local GaragesData = lib.load('config.garages')
@@ -17,7 +20,7 @@ local function nearbyPark(point)
         if point.isClosest and point.currentDistance < 1.2 then
             if not hasTextUI then
                 hasTextUI = point
-                lib.showTextUI('[E] - park vehicle')
+                lib.showTextUI(locale('park_vehicle'))
             end
 
             if IsControlJustReleased(0, 38) then
@@ -49,12 +52,12 @@ local function nearbyEnter(point)
     if point.isClosest and point.currentDistance < 1.2 then
         if not hasTextUI then
             hasTextUI = point
-            lib.showTextUI(('[E] - %s'):format(point.garage))
+            lib.showTextUI(locale('enter_garage', point.garage))
         end
 
         if IsControlJustReleased(0, 38) then
             if cache.vehicle then
-                return Edit.Notify('Leave vehicle first')
+                return Edit.Notify(locale('leave_vehicle_first'))
             end
 
             Garage.OpenGarageMenu(point.garage)
@@ -87,7 +90,6 @@ function CreateGarages()
             coords = v.insideSpawn,
             distance = 20.0,
             nearby = Garage.NearbyExit,
-            garage = k
         })
 
         if v.customizationMenu then
@@ -110,6 +112,7 @@ function CreateGarages()
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentString(k)
         EndTextCommandSetBlipName(blip)
+        SetBlipCategory(blip, 10)
 
         Points.enter[#Points.enter + 1] = enter
         Points.exit[#Points.exit + 1] = exit

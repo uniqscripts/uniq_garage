@@ -15,7 +15,6 @@ end
 
 
 function Edit.Notify(description, type)
-    print 'da'
     lib.notify({
         description = description,
         duration = 4500,
