@@ -6,8 +6,9 @@ require(('bridge.%s.client'):format(Shared.framework))
 require 'client.impound'
 
 local Edit = require 'edit_me'
-local GaragesData = lib.load('config.garages')
-local General = lib.load('config.general')
+local GaragesData = lib.load 'config.garages'
+local General = lib.load 'config.general'
+local Interior = lib.load 'config.interior'
 local Garage = require 'client.garage'
 local Points = { enter = {}, exit = {}, park = {}, blip = {}, edit = {} }
 local hasTextUI
@@ -30,7 +31,7 @@ local function nearbyPark(point)
                 local cb, msg = lib.callback.await('uniq_garage:cb:CanStore', 1000, point.garage, plate, class, properties)
 
                 if not cb then
-                    return Edit.Notify(msg, 'warning')
+                    return Edit.Notify(locale(msg), 'warning')
                 end
 
                 DeleteEntity(cache.vehicle)
@@ -60,7 +61,7 @@ local function nearbyEnter(point)
                 return Edit.Notify(locale('leave_vehicle_first'))
             end
 
-            Garage.OpenGarageMenu(point.garage)
+            Garage.OpenGarageMenu(point.garage, point.interior)
             hasTextUI = nil
             lib.hideTextUI()
         end
@@ -76,7 +77,8 @@ function CreateGarages()
             coords = v.enter,
             distance = 30.0,
             nearby = nearbyEnter,
-            garage = k
+            garage = k,
+            interior = v.interior
         })
 
         local park = lib.points.new({
@@ -87,17 +89,18 @@ function CreateGarages()
         })
 
         local exit = lib.points.new({
-            coords = v.insideSpawn,
+            coords = Interior[v.interior].insideSpawn,
             distance = 20.0,
             nearby = Garage.NearbyExit,
         })
 
-        if v.customizationMenu then
+        if Interior[v.interior].customizationMenu then
             local edit = lib.points.new({
-                coords = v.customizationMenu,
+                coords = Interior[v.interior].customizationMenu,
                 distance = 20.0,
                 nearby = Garage.NearbyCustomization,
-                garage = k
+                garage = k,
+                interior = v.interior
             })
 
             Points.edit[#Points.edit + 1] = edit
@@ -122,17 +125,10 @@ function CreateGarages()
 end
 
 function ClearAll()
-    for i = 1, #Points.enter do
-        Points.enter[i]:remove()
-    end
-
-    for i = 1, #Points.park do
-        Points.park[i]:remove()
-    end
-
-    for i = 1, #Points.exit do
-        Points.exit[i]:remove()
-    end
+    for i = 1, #Points.enter do Points.enter[i]:remove() end
+    for i = 1, #Points.park do Points.park[i]:remove() end
+    for i = 1, #Points.exit do Points.exit[i]:remove() end
+    for i = 1, #Points.edit do Points.edit[i]:remove() end
 end
 
 AddEventHandler('onResourceStop', function(resource)

@@ -22,6 +22,14 @@ local function FindFreeSpawn(index)
     return false
 end
 
+local function DeletePreview()
+    if LastVehicle then
+        DeleteEntity(LastVehicle)
+        LastVehicle = nil
+    end
+end
+
+
 function Impound.CreateImpoundList(index)
     local vehicles = lib.callback.await('uniq_garage:cb:GetImpoundList', 100, index)
 
@@ -35,10 +43,7 @@ function Impound.CreateImpoundList(index)
         position = 'top-right',
         onSelected = function(selected, secondary, args)
             if vehicles[args.plate] then
-                if LastVehicle then
-                    DeleteEntity(LastVehicle)
-                    LastVehicle = nil
-                end
+                DeletePreview()
 
                 if IsModelInCdimage(vehicles[args.plate].model) then
                     local hash = lib.requestModel(vehicles[args.plate].model)
@@ -55,10 +60,7 @@ function Impound.CreateImpoundList(index)
             end
         end,
         onClose = function(keyPressed)
-            if LastVehicle then
-                DeleteEntity(LastVehicle)
-                LastVehicle = nil
-            end
+            DeletePreview()
         end,
         options = {}
     }
@@ -90,7 +92,7 @@ function Impound.CreateImpoundList(index)
             local coords = FindFreeSpawn(index)
             
             if not coords then
-                Edit.Notify(locale('+no_free_spawnpoint'), 'error')
+                Edit.Notify(locale('no_free_spawnpoint'), 'error')
                 return
             end
 
@@ -141,7 +143,7 @@ function Impound.CreatePoints()
         SetBlipColour(blip, cfg.Locations[i].blip.colour)
         SetBlipAsShortRange(blip, true)
         BeginTextCommandSetBlipName("STRING")
-        AddTextComponentString(cfg.Locations[i].blip.label)
+        AddTextComponentString(locale('impound'))
         EndTextCommandSetBlipName(blip)
 
         Impound.Points[#Impound.Points + 1] = point
@@ -157,7 +159,7 @@ end
 
 AddEventHandler('onResourceStop', function(resource)
     if cache.resource == resource then
-        if LastVehicle then DeleteEntity(LastVehicle) end
+        DeletePreview()
     end
 end)
 

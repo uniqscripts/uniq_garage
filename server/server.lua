@@ -4,6 +4,7 @@ local db = require(('bridge.%s.owned_vehicles'):format(Shared.framework))
 local Framework = require(('bridge.%s.server'):format(Shared.framework))
 local GaragesData = lib.load 'config.garages'
 local utils = require 'server.functions'
+local Interior = lib.load 'config.interior'
 local Garages = {}
 local PlayerVehicles = {}
 local ClassList = lib.load('config.impound').ImpoundPrices
@@ -55,7 +56,7 @@ lib.callback.register('uniq_garage:cb:DoesOwn', function(source, garage)
 end)
 
 
-RegisterNetEvent('uniq_garage:server:BuyGarage', function(garage)
+RegisterNetEvent('uniq_garage:server:BuyGarage', function(garage, interior)
     local src = source
     local price = GaragesData[garage].price
     local identifier = Framework.GetIdentifier(src)
@@ -70,7 +71,7 @@ RegisterNetEvent('uniq_garage:server:BuyGarage', function(garage)
         end
 
         Garages[identifier][garage].name = garage
-        Garages[identifier][garage].style = GaragesData[garage].Customization and GaragesData[garage].Customization.Default or {}
+        Garages[identifier][garage].style = Interior[interior].Customization and Interior[interior].Customization.Default or {}
         Garages[identifier][garage].slot = {}
 
         MySQL.insert('INSERT INTO `uniq_garage` (owner, name, data) VALUES (?, ?, ?)', { identifier, garage, json.encode(Garages[identifier][garage]) })
@@ -82,20 +83,20 @@ RegisterNetEvent('uniq_garage:server:BuyGarage', function(garage)
 end)
 
 
-lib.callback.register('uniq_garage:cb:BuyCustomization', function(source, name, floor, data, color)
+lib.callback.register('uniq_garage:cb:BuyCustomization', function(source, data)
     local identifier = Framework.GetIdentifier(source)
 
-    if Garages[identifier] and Garages[identifier][name] then
-        if data.color and Garages[identifier][name].style[floor].color.color == color or Garages[identifier][name].style[floor][data.type] == data.style then
+    if Garages[identifier] and Garages[identifier][data.name] then
+        if data.interior.color and Garages[identifier][data.name].style[data.floor].color.color == data.color or Garages[identifier][data.name].style[data.floor][data.interior.type] == data.interior.style then
             TriggerClientEvent('uniq_garage:Notify', source, locale('have_customization'), 'error')
             return false
         end
 
         local price
 
-        for k,v in pairs(GaragesData[name].Customization.Purchasable) do
+        for k,v in pairs(Interior[data.int].Customization.Purchasable) do
             for kk, vv in pairs(v) do
-                if vv.style == data.style then
+                if vv.style == data.interior.style then
                     price = vv.price
                     break
                 end
@@ -104,10 +105,10 @@ lib.callback.register('uniq_garage:cb:BuyCustomization', function(source, name, 
 
         if type(price) == "number" then
             if utils.PayPrice(source, price) then
-                if data.color then
-                    Garages[identifier][name].style[floor].color.color = color
+                if data.interior.color then
+                    Garages[identifier][data.name].style[data.floor].color.color = data.color
                 else
-                    Garages[identifier][name].style[floor][data.type] = data.style
+                    Garages[identifier][data.name].style[data.floor][data.interior.type] = data.interior.style
                 end
 
                 return true
@@ -126,14 +127,14 @@ local function isSlotFree(name, identifier)
         return false, false
     end
 
-    local maxFloors = #GaragesData[name].Vehicles or 1
+    local maxFloors = #Interior[GaragesData[name].interior].Vehicles or 1
 
     for floor = 1, maxFloors do
         if not Garages[identifier][name].slot[floor] then
             Garages[identifier][name].slot[floor] = {}
         end
 
-        for slot = 1, #GaragesData[name].Vehicles[floor] do
+        for slot = 1, #Interior[GaragesData[name].interior].Vehicles[floor] do
             if not Garages[identifier][name].slot[floor][slot] then
                 return floor, slot
             end
@@ -148,11 +149,11 @@ local function FindSlotByPlate(name, identifier, plate)
         return false, false
     end
 
-    local maxFloors = #GaragesData[name].Vehicles or 1
+    local maxFloors = #Interior[GaragesData[name].interior].Vehicles or 1
 
     for floor = 1, maxFloors do
         if Garages[identifier][name].slot[floor] then
-            for slot = 1, #GaragesData[name].Vehicles[floor] do
+            for slot = 1, #Interior[GaragesData[name].interior].Vehicles[floor] do
                 if Garages[identifier][name].slot[floor][slot] and Garages[identifier][name].slot[floor][slot] == plate then
                     return floor, slot
                 end
