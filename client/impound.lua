@@ -52,6 +52,7 @@ function Impound.CreateImpoundList(index)
 
                     FreezeEntityPosition(vehicle, true)
                     TaskWarpPedIntoVehicle(cache.ped, vehicle, -1)
+                    lib.setVehicleProperties(vehicle, vehicles[args.plate])
 
                     LastVehicle = vehicle
                 else

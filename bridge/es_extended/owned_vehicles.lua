@@ -68,6 +68,13 @@ function db.GetImpoundList(numb, identifier)
                         local plate = strtrim(GetVehicleNumberPlateText(vehicle))
 
                         if plate == modPlate then
+                            if GetEntityRoutingBucket(vehicle) > 0 then
+                                SetEntityRoutingBucket(vehicle, 0)
+                                DeleteEntity(vehicle)
+                                list[modPlate] = mods
+                                break
+                            end
+
                             if GetVehiclePetrolTankHealth(vehicle) > 0 and GetVehicleBodyHealth(vehicle) > 0 then break end
                             if GetVehiclePetrolTankHealth(vehicle) <= 0 and GetVehicleBodyHealth(vehicle) <= 0 then
                                 DeleteEntity(vehicle)
