@@ -34,7 +34,7 @@ function Impound.CreateImpoundList(index)
     local vehicles = lib.callback.await('uniq_garage:cb:GetImpoundList', 100, index)
 
     if not vehicles then
-        return Edit.Notify('No vehicles at impound')
+        return Edit.Notify(locale('impound_empty'))
     end
 
     local menu = {
