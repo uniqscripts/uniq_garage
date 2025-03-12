@@ -6,3 +6,4 @@ Dependency:
 Based on GTA V Online Garages
 
 https://docs.uniq-scripts.com/documentation/free-resources/garages/guides
+https://discord.gg/uniq-team
