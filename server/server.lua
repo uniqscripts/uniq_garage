@@ -82,40 +82,62 @@ RegisterNetEvent('uniq_garage:server:BuyGarage', function(garage, interior)
     end
 end)
 
-
 lib.callback.register('uniq_garage:cb:BuyCustomization', function(source, data)
     local identifier = Framework.GetIdentifier(source)
+    local playerGarage = Garages[identifier] and Garages[identifier][data.garage]
 
-    if Garages[identifier] and Garages[identifier][data.name] then
-        if data.interior.color and Garages[identifier][data.name].style[data.floor].color.color == data.color or Garages[identifier][data.name].style[data.floor][data.interior.type] == data.interior.style then
+    if not playerGarage then return false end
+
+    local floorStyles = playerGarage.style[data.floor]
+
+    for _, style in ipairs(floorStyles) do
+        if data.interior.color then
+            if style.name == data.interior.name and tonumber(style.color) == tonumber(data.color) then
+                TriggerClientEvent('uniq_garage:Notify', source, locale('have_customization'), 'error')
+                return false
+            end
+        elseif style.name == data.interior.name then
             TriggerClientEvent('uniq_garage:Notify', source, locale('have_customization'), 'error')
             return false
         end
+    end
 
-        local price
+    local price
+    for _, category in pairs(Interior[data.int].Customization.Purchasable) do
+        for _, item in pairs(category) do
+            if item.label == data.interior.label then
+                price = item.price
+                break
+            end
+        end
+        if price then break end
+    end
 
-        for k,v in pairs(Interior[data.int].Customization.Purchasable) do
-            for kk, vv in pairs(v) do
-                if vv.style == data.interior.style then
-                    price = vv.price
-                    break
-                end
+    if not price or type(price) ~= "number" then return false end
+
+    if utils.PayPrice(source, price) then
+        local found = false
+
+        for _, style in ipairs(floorStyles) do
+            if style.type == data.interior.type then
+                style.name = data.interior.name
+                if data.interior.color then style.color = data.color end
+                found = true
+                break
             end
         end
 
-        if type(price) == "number" then
-            if utils.PayPrice(source, price) then
-                if data.interior.color then
-                    Garages[identifier][data.name].style[data.floor].color.color = data.color
-                else
-                    Garages[identifier][data.name].style[data.floor][data.interior.type] = data.interior.style
-                end
-
-                return true
-            else
-                TriggerClientEvent('uniq_garage:Notify', source, locale('no_money'), 'error')
-            end
+        if not found then
+            floorStyles[#floorStyles + 1] = {
+                name = data.interior.name,
+                color = data.interior.color and data.color or nil,
+                type = data.interior.type
+            }
         end
+
+        return true
+    else
+        TriggerClientEvent('uniq_garage:Notify', source, locale('no_money'), 'error')
     end
 
     return false
@@ -231,8 +253,6 @@ lib.callback.register('uniq_garage:cb:CanStore', function(source, garage, plate,
                 Garages[identifier][garage].slot[floor][slot] = plate
 
                 local cb = db.StoreVehicle(plate, garage, properties, GaragesData[garage].type)
-
-                print(json.encode(cb, { indent = true }))
 
                 return cb > 0
             else

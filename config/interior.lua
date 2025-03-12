@@ -3,26 +3,103 @@ return {
         interiorId = 260353,
         ipl = 'sm_smugdlc_interior_placement_interior_0_smugdlc_int_01_milo_',
         insideSpawn = vec4(-1267.276, -2964.538, -48.490, 180.641),
+        customizationMenu = vec3(-1244.766, -3013.324, -42.888),
         Vehicles = {
             [1] = {
-                vec4(-1278.662, -3009.974, -47.952, 227.240),
-                vec4(-1279.104, -3036.854, -47.953, 227.774),
-                vec4(-1278.629, -2979.949, -47.950, 208.765),
-                vec4(-1257.139, -2979.658, -47.954, 140.987),
-                vec4(-1278.459, -2998.660, -47.951, 218.122),
-                vec4(-1254.537, -2996.039, -47.953, 153.004),
-                vec4(-1253.602, -3024.242, -47.951, 148.359),
-                vec4(-1254.647, -3010.269, -47.946, 147.497),
-                vec4(-1267.867, -3023.165, -47.951, 358.918),
-                vec4(-1266.686, -2971.295, -47.950, 181.774),
-                vec4(-1279.570, -3024.264, -47.952, 224.579),
-                vec4(-1266.770, -3005.505, -47.951, 358.676),
-                vec4(-1267.028, -2991.258, -47.951, 179.072),
-                vec4(-1264.715, -3039.752, -47.951, 2.101),
-                vec4(-1252.209, -3036.531, -47.951, 131.371),
+                vec4(-1266.889, -3013.280, -48.490, 181.882)
             }
         },
         Customization = {
+            Default = {
+                [1] = {
+                    { name = 'set_tint_shell', color = 1, type = 'tint' },
+                    { name = 'set_crane_tint', color = 1, type = 'crane' },
+                    { name = 'set_floor_2', type = 'floor' },
+                    { name = 'set_floor_decal_1', color = 1, type = 'floor_decal' },
+                    { name = 'set_office_basic', type = 'office' },
+                    { name = 'set_bedroom_modern', type = 'bedroom' },
+                    { name = 'set_bedroom_tint', color = 1, type = 'bedroom_tint' },
+                    { name = 'set_bedroom_blinds_open', type = 'blinds' },
+                }
+            },
+
+            Purchasable = {
+                ['Floor'] = {
+                    { label = 'Floor 1', name = 'set_floor_1', price = 150000, type = 'floor' },
+                    { label = 'Floor 2', name = 'set_floor_2', price = 150000, type = 'floor' },
+                },
+                ['Floor Decal'] = {
+                    { label = 'Floor Decal 1', name = 'set_floor_decal_1', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 2', name = 'set_floor_decal_2', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 3', name = 'set_floor_decal_3', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 4', name = 'set_floor_decal_4', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 5', name = 'set_floor_decal_5', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 6', name = 'set_floor_decal_6', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 7', name = 'set_floor_decal_7', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 8', name = 'set_floor_decal_8', price = 150000, type = 'floor_decal' },
+                    { label = 'Floor Decal 9', name = 'set_floor_decal_9', price = 150000, type = 'floor_decal' },
+                },
+                ['Interior Color Sets'] = {
+                    { label = 'sable, red, gray', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'white, blue, gray', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'gray, orange, blue', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'gray, blue, orange', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'gray, light gray, red', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'yellow, gray, light gray', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'light Black and white', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'dark Black and white', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                    { label = 'sable and gray', name = 'set_tint_shell', price = 150000, type = 'tint', },
+                },
+                ['Ceiling Light'] = {
+                    { label = 'None', name = '', price = 150000, type = 'ceiling' },
+                    { label = 'Yellow', name = 'set_lighting_hangar_a', price = 150000, type = 'ceiling' },
+                    { label = 'Blue', name = 'set_lighting_hangar_b', price = 150000, type = 'ceiling' },
+                    { label = 'White', name = 'set_lighting_hangar_c', price = 150000, type = 'ceiling' },
+                },
+                ['Walls Light'] = {
+                    { label = 'None', name = '', price = 150000, type = 'walls' },
+                    { label = 'Neutral', name = 'set_lighting_wall_neutral', price = 150000, type = 'walls' },
+                    { label = 'Blue', name = 'set_lighting_wall_tint01', price = 150000, type = 'walls' },
+                    { label = 'Orange', name = 'set_lighting_wall_tint02', price = 150000, type = 'walls' },
+                    { label = 'Light Yellow', name = 'set_lighting_wall_tint03', price = 150000, type = 'walls' },
+                    { label = 'Light Yellow 2', name = 'set_lighting_wall_tint04', price = 150000, type = 'walls' },
+                    { label = 'Dimmed', name = 'set_lighting_wall_tint05', price = 150000, type = 'walls' },
+                    { label = 'Strong Yellow', name = 'set_lighting_wall_tint06', price = 150000, type = 'walls' },
+                    { label = 'White', name = 'set_lighting_wall_tint07', price = 150000, type = 'walls' },
+                    { label = 'Light Green', name = 'set_lighting_wall_tint08', price = 150000, type = 'walls' },
+                    { label = 'Yellow', name = 'set_lighting_wall_tint09', price = 150000, type = 'walls' },
+                },
+                ['Fake Lights'] = {
+                    { label = 'None', name = 'set_lighting_tint_props', price = 150000, type = 'fakelight' },
+                    { label = 'Yellow', name = 'set_lighting_tint_props', price = 150000, type = 'fakelight' },
+                    { label = 'Blue', name = 'set_lighting_tint_props', price = 150000, type = 'fakelight' },
+                    { label = 'White', name = 'set_lighting_tint_props', price = 150000, type = 'fakelight' },
+                },
+                ['Mod Area'] = {
+                    { label = 'On', name = 'set_modarea', price = 150000, type = 'modarea' },
+                    { label = 'Off', name = '', price = 5000, type = 'modarea' },
+                    { label = 'sable, red, gray', name = 'set_modarea', price = 150000, type = 'modarea', color = 1 },
+                    { label = 'white, blue, gray', name = 'set_modarea', price = 150000, type = 'modarea', color = 2 },
+                    { label = 'gray, orange, blue', name = 'set_modarea', price = 150000, type = 'modarea', color = 3 },
+                    { label = 'gray, blue, orange', name = 'set_modarea', price = 150000, type = 'modarea', color = 4 },
+                    { label = 'gray, light gray, red', name = 'set_modarea', price = 150000, type = 'modarea', color = 5 },
+                    { label = 'yellow, gray, light gray', name = 'set_modarea', price = 150000, type = 'modarea', color = 6 },
+                    { label = 'light Black and white', name = 'set_modarea', price = 150000, type = 'modarea', color = 7 },
+                    { label = 'dark Black and white', name = 'set_modarea', price = 150000, type = 'modarea', color = 8 },
+                    { label = 'sable and gray', name = 'set_modarea', price = 150000, type = 'modarea', color = 9 },
+                },
+                ['Crane'] = {
+                    { label = 'On', name = 'set_crane_tint', price = 150000, type = 'crane' },
+                    { label = 'Off', name = '', price = 5000, type = 'crane' },
+                    { label = 'Yellow', name = 'set_crane_tint', price = 150000, type = 'crane', color = 1 },
+                    { label = 'Red/Yellow', name = 'set_crane_tint', price = 150000, type = 'crane', color = 2 },
+                    { label = 'Orange', name = 'set_crane_tint', price = 150000, type = 'crane', color = 3 },
+                    { label = 'Dark Gray', name = 'set_crane_tint', price = 150000, type = 'crane', color = 7 },
+                    { label = 'Snow White', name = 'set_crane_tint', price = 150000, type = 'crane', color = 8 },
+                    { label = 'Dark White', name = 'set_crane_tint', price = 150000, type = 'crane', color = 9 },
+                },
+            },
+
             DeactivateInterior = function()
                 local interiorId = 260353
                 local list = {
@@ -74,49 +151,27 @@ return {
                 RefreshInterior(interiorId)
             end,
 
-            Default = {
-                [1] = {
-                    tint = { 'set_tint_shell', 1 },
-                    crane = { 'set_crane_tint', 1 },
-                    floor = 'set_floor_2',
-                    floor_decal = { 'set_floor_decal_1', 1 },
-                    lighting_hangar = 'set_lighting_hangar_a',
-                    set_lighting_wall_neutral = 'set_lighting_wall_neutral',
-                    light_tint = { 'set_lighting_tint_props', 1 },
-                    modarea = { 'set_modarea', 1 },
-                    office = 'set_office_basic',
-                    bedroom = 'set_bedroom_modern',
-                    bedroom_tint = { 'set_bedroom_tint', 1 },
-                    blinds = 'set_bedroom_blinds_open'
-                }
-            },
-            
-
             LoadDefault = function()
                 -- https://github.com/Bob74/bob74_ipl/blob/master/dlc_smuggler/hangar.lua
                 local interiorId = 260353
                 local list = {
-                    { a = 'set_tint_shell', b = 1 },
-                    { a = 'set_crane_tint', b = 1 },
-                    { a = 'set_floor_2' },
-                    { a = 'set_floor_decal_1', b = 1 },
-                    { a = 'set_lighting_hangar_a' },
-                    { a = 'set_lighting_wall_neutral' },
-                    { a = 'set_lighting_tint_props', b = 1 },
-                    { a = 'set_modarea', b = 1 },
-                    { a = 'set_office_basic' },
-                    { a = 'set_bedroom_modern' },
-                    { a = 'set_bedroom_tint', b = 1 },
-                    { a = 'set_bedroom_blinds_open' },
+                    { name = 'set_tint_shell', color = 1, type = 'tint' },
+                    { name = 'set_crane_tint', color = 1, type = 'crane' },
+                    { name = 'set_floor_2', type = 'floor' },
+                    { name = 'set_floor_decal_1', color = 1, type = 'floor_decal' },
+                    { name = 'set_office_basic', type = 'office' },
+                    { name = 'set_bedroom_modern', type = 'bedroom' },
+                    { name = 'set_bedroom_tint', color = 1, type = 'bedroom_tint' },
+                    { name = 'set_bedroom_blinds_open', type = 'blinds' },
                 }
 
                 for i = 1, #list do
-                    if not IsInteriorEntitySetActive(interiorId, list[i].a) then
-                        ActivateInteriorEntitySet(interiorId, list[i].a)
+                    if not IsInteriorEntitySetActive(interiorId, list[i].name) then
+                        ActivateInteriorEntitySet(interiorId, list[i].name)
                     end
 
-                    if list[i].b then
-                        SetInteriorEntitySetColor(interiorId, list[i].a, list[i].b)
+                    if list[i].color then
+                        SetInteriorEntitySetColor(interiorId, list[i].name, list[i].color)
                     end
                 end
 
@@ -159,37 +214,41 @@ return {
         Customization = {
             Purchasable = {
                 ['Interior'] = {
-                    { label = 'Interior 1', style = 'garage_decor_01', price = 150000, type = 'interior' },
-                    { label = 'Interior 2', style = 'garage_decor_02', price = 285000, type = 'interior' },
-                    { label = 'Interior 3', style = 'garage_decor_03', price = 415000, type = 'interior' },
-                    { label = 'Interior 4', style = 'garage_decor_04', price = 500000, type = 'interior' },
+                    { label = 'Interior 1', name = 'garage_decor_01', price = 150000, type = 'interior' },
+                    { label = 'Interior 2', name = 'garage_decor_02', price = 285000, type = 'interior' },
+                    { label = 'Interior 3', name = 'garage_decor_03', price = 415000, type = 'interior' },
+                    { label = 'Interior 4', name = 'garage_decor_04', price = 500000, type = 'interior' },
                 },
                 ['Lighting'] = {
-                    { label = 'Lighting 1', style = 'lighting_option01', price = 75000, type = 'light' },
-                    { label = 'Lighting 2', style = 'lighting_option02', price = 81500, type = 'light' },
-                    { label = 'Lighting 3', style = 'lighting_option03', price = 85000, type = 'light' },
-                    { label = 'Lighting 4', style = 'lighting_option04', price = 87500, type = 'light' },
-                    { label = 'Lighting 5', style = 'lighting_option05', price = 92500, type = 'light' },
-                    { label = 'Lighting 6', style = 'lighting_option06', price = 99500, type = 'light' },
-                    { label = 'Lighting 7', style = 'lighting_option07', price = 105000, type = 'light' },
-                    { label = 'Lighting 8', style = 'lighting_option08', price = 127500, type = 'light' },
-                    { label = 'Lighting 9', style = 'lighting_option09', price = 150000, type = 'light' },
+                    { label = 'Lighting 1', name = 'lighting_option01', price = 75000, type = 'light' },
+                    { label = 'Lighting 2', name = 'lighting_option02', price = 81500, type = 'light' },
+                    { label = 'Lighting 3', name = 'lighting_option03', price = 85000, type = 'light' },
+                    { label = 'Lighting 4', name = 'lighting_option04', price = 87500, type = 'light' },
+                    { label = 'Lighting 5', name = 'lighting_option05', price = 92500, type = 'light' },
+                    { label = 'Lighting 6', name = 'lighting_option06', price = 99500, type = 'light' },
+                    { label = 'Lighting 7', name = 'lighting_option07', price = 105000, type = 'light' },
+                    { label = 'Lighting 8', name = 'lighting_option08', price = 127500, type = 'light' },
+                    { label = 'Lighting 9', name = 'lighting_option09', price = 150000, type = 'light' },
                 },
                 ['Signage'] = {
-                    { label = 'Lighting 1', style = 'numbering_style01_n1', price = 50000, type = 'signage' },
-                    { label = 'Lighting 2', style = 'numbering_style02_n1', price = 62000, type = 'signage' },
-                    { label = 'Lighting 3', style = 'numbering_style03_n1', price = 75000, type = 'signage' },
-                    { label = 'Lighting 4', style = 'numbering_style04_n1', price = 87500, type = 'signage' },
-                    { label = 'Lighting 5', style = 'numbering_style05_n1', price = 100000, type = 'signage' },
-                    { label = 'Lighting 6', style = 'numbering_style06_n1', price = 132000, type = 'signage' },
-                    { label = 'Lighting 7', style = 'numbering_style07_n1', price = 165000, type = 'signage' },
-                    { label = 'Lighting 8', style = 'numbering_style08_n1', price = 197000, type = 'signage' },
-                    { label = 'Lighting 9', style = 'numbering_style09_n1', price = 250000, type = 'signage' },
+                    { label = 'Lighting 1', name = 'numbering_style01_n1', price = 50000, type = 'signage' },
+                    { label = 'Lighting 2', name = 'numbering_style02_n1', price = 62000, type = 'signage' },
+                    { label = 'Lighting 3', name = 'numbering_style03_n1', price = 75000, type = 'signage' },
+                    { label = 'Lighting 4', name = 'numbering_style04_n1', price = 87500, type = 'signage' },
+                    { label = 'Lighting 5', name = 'numbering_style05_n1', price = 100000, type = 'signage' },
+                    { label = 'Lighting 6', name = 'numbering_style06_n1', price = 132000, type = 'signage' },
+                    { label = 'Lighting 7', name = 'numbering_style07_n1', price = 165000, type = 'signage' },
+                    { label = 'Lighting 8', name = 'numbering_style08_n1', price = 197000, type = 'signage' },
+                    { label = 'Lighting 9', name = 'numbering_style09_n1', price = 250000, type = 'signage' },
                 }
             },
 
             Default = {
-                [1] = { interior = 'garage_decor_01', light = 'lighting_option01', signage = 'numbering_style01_n1' }
+                [1] = {
+                    { name = 'garage_decor_01', type = 'interior' },
+                    { name = 'lighting_option01', type = 'light' },
+                    { name = 'numbering_style01_n1', type = 'signage' },
+                }
             },
 
             DeactivateInterior = function()
@@ -282,36 +341,56 @@ return {
         interiorId = 290561,
         ipl = 'xm3_garage_fix',
         insideSpawn = vec4(528.401, -2638.002, -49.000, 97.635),
-        customizationMenu = vec3(526.233, -2609.031, -49.000),
+        customizationMenu = vec3(525.576, -2638.753, -49.000),
         Customization = {
             Purchasable = {
                 ['Tint'] = {
-                    { label = 'White', price = 75000, style = 'entity_set_tint_01', color = true, },
-                    { label = 'Gray', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Black', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Purple', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Orange', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Yellow', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Blue', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Red', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Green', price = 75000, style = 'entity_set_tint_01', color = true},
-                    { label = 'Vintage Blue', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Vintage Red', price = 75000, style = 'entity_set_tint_01', color = true },
-                    { label = 'Vintage Green', price = 75000, style = 'entity_set_tint_01', color = true },
+                    { label = 'White', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 1 },
+                    { label = 'Gray', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 2 },
+                    { label = 'Black', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 3 },
+                    { label = 'Purple', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 4 },
+                    { label = 'Orange', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 5 },
+                    { label = 'Yellow', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 6 },
+                    { label = 'Blue', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 7 },
+                    { label = 'Red', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 8 },
+                    { label = 'Green', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 9 },
+                    { label = 'Vintage Blue', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 10 },
+                    { label = 'Vintage Red', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 11 },
+                    { label = 'Vintage Green', price = 75000, name = 'entity_set_tint_01', type = 'tint', color = 12 },
                 },
                 ['Interior'] = {
-                    { label = 'Immaculate', style = 'entity_set_shell_01', price = 137000, type = 'interior' },
-                    { label = 'Industrial', style = 'entity_set_shell_02', price = 180000, type = 'interior' },
-                    { label = 'Indulgent', style = 'entity_set_shell_03', price = 265000, type = 'interior' },
+                    { label = 'Immaculate', name = 'entity_set_shell_01', price = 137000, type = 'interior' },
+                    { label = 'Industrial', name = 'entity_set_shell_02', price = 180000, type = 'interior' },
+                    { label = 'Indulgent', name = 'entity_set_shell_03', price = 265000, type = 'interior' },
                 }
             },
-            Default = { -- This will be set when in preview or purchasing
-                -- [[ [floor] = { style } ]]
-                [1] = { interior = 'entity_set_shell_01', number = 'entity_set_numbers_01', color = { entity = 'entity_set_tint_01', color = 1 } },
-                [2] = { interior = 'entity_set_shell_01', number = 'entity_set_numbers_02', color = { entity = 'entity_set_tint_01', color = 1 } },
-                [3] = { interior = 'entity_set_shell_01', number = 'entity_set_numbers_03', color = { entity = 'entity_set_tint_01', color = 1 } },
-                [4] = { interior = 'entity_set_shell_01', number = 'entity_set_numbers_04', color = { entity = 'entity_set_tint_01', color = 1 } },
-                [5] = { interior = 'entity_set_shell_01', number = 'entity_set_numbers_05', color = { entity = 'entity_set_tint_01', color = 1 } },
+            Default = { -- This will be set when you purchase garage
+                -- [[ [floor] = { data } ]]
+                [1] = {
+                    { name = 'entity_set_shell_01', type = 'interior' },
+                    { name = 'entity_set_numbers_01' },
+                    { name = 'entity_set_tint_01', type = 'tint', color = 1 }
+                },
+                [2] = {
+                    { name = 'entity_set_shell_01', type = 'interior' },
+                    { name = 'entity_set_numbers_02' },
+                    { name = 'entity_set_tint_01', type = 'tint', color = 1 }
+                },
+                [3] = {
+                    { name = 'entity_set_shell_01', type = 'interior' },
+                    { name = 'entity_set_numbers_03' },
+                    { name = 'entity_set_tint_01', type = 'tint', color = 1 }
+                },
+                [4] = {
+                    { name = 'entity_set_shell_01', type = 'interior' },
+                    { name = 'entity_set_numbers_04' },
+                    { name = 'entity_set_tint_01', type = 'tint', color = 1 }
+                },
+                [5] = {
+                    { name = 'entity_set_shell_01', type = 'interior' },
+                    { name = 'entity_set_numbers_05' },
+                    { name = 'entity_set_tint_01', type = 'tint', color = 1 }
+                }
             },
 
             DeactivateInterior = function()

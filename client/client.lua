@@ -14,7 +14,7 @@ local Points = { enter = {}, exit = {}, park = {}, blip = {}, edit = {} }
 local hasTextUI
 
 local function nearbyPark(point)
-    if cache.vehicle then
+    if cache.seat == -1 then
         ---@diagnostic disable-next-line: param-type-mismatch
 		DrawMarker(General.Markers.DeleteVehicle.id, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, General.Markers.DeleteVehicle.scaleX, General.Markers.DeleteVehicle.scaleY, General.Markers.DeleteVehicle.scaleZ, General.Markers.DeleteVehicle.red, General.Markers.DeleteVehicle.green, General.Markers.DeleteVehicle.blue, 222, false, false, 0, true, false, false, false)
 
@@ -29,8 +29,6 @@ local function nearbyPark(point)
                 local class = GetVehicleClass(cache.vehicle)
                 local properties = lib.getVehicleProperties(cache.vehicle)
                 local cb, msg = lib.callback.await('uniq_garage:cb:CanStore', 1000, point.garage, plate, class, properties)
-
-                print(json.encode(cb, { indent = true }))
 
                 if not cb then
                     return Edit.Notify(locale(msg), 'warning')

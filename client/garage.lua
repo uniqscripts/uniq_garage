@@ -164,27 +164,22 @@ end
 
 
 function Garage.CreateCustmozations(name, interior)
+    -- fix
     local GarageStyle = lib.callback.await('uniq_garage:cb:GetStyle', 100, name, CurrentFloor)
 
     if table.type(GarageStyle) == 'empty' then return end
-   
+
     if Interior[interior].Customization.DeactivateInterior then
         Interior[interior].Customization.DeactivateInterior()
     end
 
     for _, customization in pairs(GarageStyle) do
-        if type(customization) == "table" then
-            if customization.color then
-                if not IsInteriorEntitySetActive(Interior[interior].interiorId, customization.entity) then
-                    ActivateInteriorEntitySet(Interior[interior].interiorId, customization.entity)
-                end
+        if not IsInteriorEntitySetActive(Interior[interior].interiorId, customization.name) then
+            ActivateInteriorEntitySet(Interior[interior].interiorId, customization.name)
+        end
 
-                SetInteriorEntitySetColor(Interior[interior].interiorId, customization.entity, customization.color)
-            end
-        else
-            if not IsInteriorEntitySetActive(Interior[interior].interiorId, customization) then
-                ActivateInteriorEntitySet(Interior[interior].interiorId, customization)
-            end
+        if customization.color then
+            SetInteriorEntitySetColor(Interior[interior].interiorId, customization.name, customization.color)
         end
     end
 
@@ -230,9 +225,9 @@ function Garage.ExitGarage()
         for i = 1, #Interior[GaragesData[CurrentGarageName].interior].Vehicles do
             options[i] = { label = locale("floor_label", i), value = i }
         end
-        
+
         options[#options + 1] = { label = locale("exit"), value = "exit" }
-        
+
         local floor = lib.inputDialog('', { { type = 'select', label = locale("choose"), options = options, required = true } })
         if not floor then return end
 
@@ -260,7 +255,7 @@ function Garage.ExitGarage()
         AwaitFadeIn()
         Garage.DeleteVehicles()
         TriggerServerEvent('uniq_garage:server:ExitGarage')
-        
+
         if inPreview then
             inPreview = nil
             if Interior[GaragesData[CurrentGarageName].interior].Customization and Interior[GaragesData[CurrentGarageName].interior].Customization.DeactivateInterior then
@@ -318,7 +313,16 @@ function Garage.CreateCutomizationMenu(garage, interior)
             options = {}
 
             for numb, data in pairs(Interior[interior].Customization.Purchasable[args.style]) do
-                options[#options + 1] = { label = data.label, description = locale('price', data.price), args = { style = data.style, color = data.color or nil, type = data.type } }
+                options[#options + 1] = {
+                    label = data.label,
+                    description = locale('price', data.price),
+                    args = {
+                        label = data.label,
+                        name = data.name,
+                        color = data.color or nil,
+                        type = data.type
+                    }
+                }
             end
 
             PreviousSelected = options[1].args.style
@@ -336,18 +340,18 @@ function Garage.CreateCutomizationMenu(garage, interior)
                     end
 
                     if args2.color then
-                        if not IsInteriorEntitySetActive(Interior[interior].interiorId, args2.style) then
-                            ActivateInteriorEntitySet(Interior[interior].interiorId, args2.style)
+                        if not IsInteriorEntitySetActive(Interior[interior].interiorId, args2.name) then
+                            ActivateInteriorEntitySet(Interior[interior].interiorId, args2.name)
                         end
 
-                        SetInteriorEntitySetColor(Interior[interior].interiorId, args2.style, selected2)
+                        SetInteriorEntitySetColor(Interior[interior].interiorId, args2.name, args2.color)
                     else
-                        if not IsInteriorEntitySetActive(Interior[interior].interiorId, args2.style) then
-                            ActivateInteriorEntitySet(Interior[interior].interiorId, args2.style)
+                        if not IsInteriorEntitySetActive(Interior[interior].interiorId, args2.name) then
+                            ActivateInteriorEntitySet(Interior[interior].interiorId, args2.name)
                         end
                     end
 
-                    PreviousSelected = args2.style
+                    PreviousSelected = args2.name
                     RefreshInterior(Interior[interior].interiorId)
                 end,
                 onClose = function(keyPressed2)
@@ -358,11 +362,11 @@ function Garage.CreateCutomizationMenu(garage, interior)
                 if inPreview then return end
 
                 local cb = lib.callback.await('uniq_garage:cb:BuyCustomization', 100, {
-                    name = garage,
+                    garage = garage,
                     floor = CurrentFloor,
                     interior = args2,
                     int = interior,
-                    color = args2.color and selected2 or nil
+                    color = args2.color or nil
                 })
 
                 if not cb then
@@ -552,7 +556,7 @@ AddEventHandler('onResourceStart', function(resource)
     if cache.resource == resource then
         for i = 1, #General.PreviewModels do
             local model = joaat(General.PreviewModels[i])
-            
+
             if not IsModelInCdimage(model) then
                 warn(('%s is not valid model or not part of your game build'):format(General.PreviewModels[i]))
             end

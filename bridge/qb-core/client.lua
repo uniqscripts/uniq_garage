@@ -16,7 +16,7 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     CreateGarages()
     CreateImpound()
 
-    if PlayerData.metadata.garage then
+    if PlayerData.metadata and PlayerData.metadata.garage then
         SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor, PlayerData.metadata.garage.inPreview)
     end
 end)
@@ -42,7 +42,7 @@ AddEventHandler('onResourceStart', function(resource)
         CreateGarages()
         CreateImpound()
 
-        if PlayerData.metadata.garage then
+        if PlayerData.metadata and PlayerData.metadata.garage then
             SetPlayerInGarage(PlayerData.metadata.garage.garage, PlayerData.metadata.garage.floor, PlayerData.metadata.garage.inPreview)
         end
     end
