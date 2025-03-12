@@ -30,6 +30,8 @@ local function nearbyPark(point)
                 local properties = lib.getVehicleProperties(cache.vehicle)
                 local cb, msg = lib.callback.await('uniq_garage:cb:CanStore', 1000, point.garage, plate, class, properties)
 
+                print(json.encode(cb, { indent = true }))
+
                 if not cb then
                     return Edit.Notify(locale(msg), 'warning')
                 end

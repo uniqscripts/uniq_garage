@@ -43,7 +43,6 @@ end
 local ImpoundList = lib.load('config.impound').Locations
 local strtrim = string.strtrim
 
-
 local GetVehicleNumberPlateText = GetVehicleNumberPlateText
 local GetVehiclePetrolTankHealth = GetVehiclePetrolTankHealth
 local GetVehicleBodyHealth = GetVehicleBodyHealth

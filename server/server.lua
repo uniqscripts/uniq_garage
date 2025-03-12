@@ -230,7 +230,9 @@ lib.callback.register('uniq_garage:cb:CanStore', function(source, garage, plate,
             if type(slot) == "number" then
                 Garages[identifier][garage].slot[floor][slot] = plate
 
-                local cb = db.StoreVehicle(plate, garage, properties)
+                local cb = db.StoreVehicle(plate, garage, properties, GaragesData[garage].type)
+
+                print(json.encode(cb, { indent = true }))
 
                 return cb > 0
             else
