@@ -164,7 +164,6 @@ end
 
 
 function Garage.CreateCustmozations(name, interior)
-    -- fix
     local GarageStyle = lib.callback.await('uniq_garage:cb:GetStyle', 100, name, CurrentFloor)
 
     if table.type(GarageStyle) == 'empty' then return end

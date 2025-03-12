@@ -373,3 +373,6 @@ AddEventHandler('playerDropped', function()
 		saveToDB()
 	end
 end)
+
+
+lib.versionCheck('uniqscripts/uniq_garage')

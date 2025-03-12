@@ -364,8 +364,7 @@ return {
                     { label = 'Indulgent', name = 'entity_set_shell_03', price = 265000, type = 'interior' },
                 }
             },
-            Default = { -- This will be set when you purchase garage
-                -- [[ [floor] = { data } ]]
+            Default = {
                 [1] = {
                     { name = 'entity_set_shell_01', type = 'interior' },
                     { name = 'entity_set_numbers_01' },
