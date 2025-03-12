@@ -32,10 +32,26 @@ local function AwaitFadeOut()
 end
 
 
+function Garage.DeleteVehicles()
+    for i = 1, #TempVehicle do
+        if DoesEntityExist(TempVehicle[i]) then
+            DeleteEntity(TempVehicle[i])
+        end
+    end
+
+    TempVehicle = {}
+
+    if General.VehicleScaleFormInfo then
+        ScaleForm.HideVehicleStatus()
+    end
+end
+
 function Garage.CreateOwnedVehicles(name, interior)
     local vehicles, slots = lib.callback.await('uniq_garage:cb:GetGarageVehicles', 1000, name, CurrentFloor)
 
     if not vehicles or not slots then return end
+
+    Garage.DeleteVehicles()
 
     for id, plate in pairs(slots) do
         if plate and vehicles[plate] then
@@ -144,21 +160,6 @@ function Garage.GeneratePreviewCar(name, interior)
 
             TempVehicle[#TempVehicle + 1] = vehicle
         end
-    end
-end
-
-
-function Garage.DeleteVehicles()
-    for i = 1, #TempVehicle do
-        if DoesEntityExist(TempVehicle[i]) then
-            DeleteEntity(TempVehicle[i])
-        end
-    end
-
-    TempVehicle = {}
-
-    if General.VehicleScaleFormInfo then
-        ScaleForm.HideVehicleStatus()
     end
 end
 
@@ -470,31 +471,6 @@ function Garage.SetPlayerInGarage(name, floor, inpreview)
     TriggerServerEvent('uniq_garage:server:UpdateBucket')
 end
 
-local keybind = lib.addKeybind({
-    name = 'take_vehicle_out',
-    description = locale('keybind_description'),
-    defaultKey = 'E',
-    onReleased = function(self)
-        if inPreview then return end
-        if InvitedPlayer then return end
-
-        local plate = GetVehicleNumberPlateText(cache.vehicle)
-        local cb, msg = lib.callback.await('uniq_garage:cb:TakeVehicleOut', 100, CurrentGarageName, plate)
-
-        if not cb then
-            return Edit.Notify(locale(msg), 'error')
-        end
-
-        CurrentFloor = 'exit'
-        lib.hideTextUI()
-        TriggerServerEvent('uniq_garage:server:TakeVehicleOut', CurrentGarageName, plate)
-        self:disable(true)
-    end
-})
-
-keybind:disable(true)
-
-
 function Garage.SpawnVehicle(mods, coords)
     if not mods then return end
 
@@ -538,9 +514,29 @@ RegisterNetEvent('uniq_garage:client:TakeVehicleOut', function(name, mods)
     AwaitFadeIn()
 end)
 
+local keybind = lib.addKeybind({
+    name = 'take_vehicle_out',
+    description = locale('keybind_description'),
+    defaultKey = 'E',
+    onReleased = function(self)
+        local plate = GetVehicleNumberPlateText(cache.vehicle)
+        local cb, msg = lib.callback.await('uniq_garage:cb:TakeVehicleOut', 100, CurrentGarageName, plate)
+
+        if not cb then
+            return Edit.Notify(locale(msg), 'error')
+        end
+
+        CurrentFloor = 'exit'
+        lib.hideTextUI()
+        TriggerServerEvent('uniq_garage:server:TakeVehicleOut', CurrentGarageName, plate)
+        self:disable(true)
+    end
+})
+
+keybind:disable(true)
 
 lib.onCache('vehicle', function(value)
-    if CurrentFloor == 'exit' then return end
+    if CurrentFloor == 'exit' or inPreview or InvitedPlayer then return end
 
     if type(value) == "number" then
         keybind:disable(false)
