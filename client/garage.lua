@@ -7,7 +7,7 @@ local Interior = lib.load 'config.interior'
 local ScaleForm = require 'client.carscaleform'
 local TempVehicle = {}
 local Garage = {}
-local hasTextUI, CurrentGarageName, inPreview
+local hasTextUI, CurrentGarageName, inPreview, InvitedPlayer
 local CurrentFloor = 'exit'
 
 lib.locale()
@@ -42,7 +42,7 @@ function Garage.CreateOwnedVehicles(name, interior)
             if IsModelInCdimage(vehicles[plate].model) then
                 local coords = Interior[interior].Vehicles[CurrentFloor][id]
                 local model = lib.requestModel(vehicles[plate].model)
-                local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, coords.w, false, false)
+                local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, coords.w, true, false)
 
                 for _ = 1, 10 do
                     SetVehicleOnGroundProperly(vehicle)
@@ -220,7 +220,7 @@ function Garage.ExitGarage()
 
     local options = {}
 
-    if #Interior[GaragesData[CurrentGarageName].interior].Vehicles > 1 and not inPreview then
+    if #Interior[GaragesData[CurrentGarageName].interior].Vehicles > 1 and not inPreview and not InvitedPlayer then
         for i = 1, #Interior[GaragesData[CurrentGarageName].interior].Vehicles do
             options[i] = { label = locale("floor_label", i), value = i }
         end
@@ -262,6 +262,10 @@ function Garage.ExitGarage()
             end
         end
 
+        if InvitedPlayer then
+            InvitedPlayer = nil
+        end
+
         CurrentGarageName = nil
     else
         Garage.CreateFloor(CurrentGarageName, GaragesData[CurrentGarageName].interior)
@@ -295,6 +299,11 @@ local PreviousSelected = nil
 function Garage.CreateCutomizationMenu(garage, interior)
     if not GaragesData[garage] then return end
     if not Interior[interior] then return end
+
+    if InvitedPlayer then
+        Edit.Notify(locale('not_your_garage'), 'error')
+        return
+    end
 
     local options = {}
 
@@ -467,6 +476,8 @@ local keybind = lib.addKeybind({
     defaultKey = 'E',
     onReleased = function(self)
         if inPreview then return end
+        if InvitedPlayer then return end
+
         local plate = GetVehicleNumberPlateText(cache.vehicle)
         local cb, msg = lib.callback.await('uniq_garage:cb:TakeVehicleOut', 100, CurrentGarageName, plate)
 
@@ -527,19 +538,6 @@ RegisterNetEvent('uniq_garage:client:TakeVehicleOut', function(name, mods)
     AwaitFadeIn()
 end)
 
-AddEventHandler('onResourceStop', function(resource)
-    if resource == cache.resource then
-        if inPreview and CurrentGarageName then
-            if Interior[GaragesData[CurrentGarageName].interior].Customization and Interior[GaragesData[CurrentGarageName].interior].Customization.DeactivateInterior then
-                Interior[GaragesData[CurrentGarageName].interior].Customization.DeactivateInterior()
-            end
-        end
-
-        Garage.DeleteVehicles()
-        lib.hideTextUI()
-    end
-end)
-
 
 lib.onCache('vehicle', function(value)
     if CurrentFloor == 'exit' then return end
@@ -551,6 +549,67 @@ lib.onCache('vehicle', function(value)
 end)
 
 
+lib.callback.register('uniq_garage:cb:GetGarageClient', function()
+    return { garage = CurrentGarageName, floor = CurrentFloor, preview = inPreview }
+end)
+
+RegisterNetEvent('uniq_garage:client:InvitePlayer', function(players, data)
+    if source == '' then return end
+
+    local input = lib.inputDialog('', {{ type = 'select', label = locale('select_player'), options = players, required = true }})
+    if not input then return end
+
+    TriggerServerEvent('uniq_garage:server:InvitePlayer', input[1], data)
+end)
+
+lib.callback.register('uniq_garage:cb:SendInvite', function(name)
+    return lib.alertDialog({
+        header = locale('invite_title'),
+        content = locale('invite_msg', name),
+        centered = true,
+        cancel = true,
+        labels = {
+            cancel = locale('decline'),
+            confirm = locale('accept')
+        }
+    })
+end)
+
+RegisterNetEvent('uniq_garage:client:TeleportPlayer', function(GarageStyle, data)
+    if source == '' then return end
+
+    DoScreenFadeOut(750)
+    AwaitFadeOut()
+
+    local interior = GaragesData[data.garage].interior
+    local coords = Interior[interior].insideSpawn
+
+    SetEntityCoords(cache.ped, coords.x, coords.y, coords.z, false, false, false, false)
+
+    if Interior[interior].Customization and Interior[interior].Customization.DeactivateInterior then
+        Interior[interior].Customization.DeactivateInterior()
+    end
+
+    for _, customization in pairs(GarageStyle) do
+        if not IsInteriorEntitySetActive(Interior[interior].interiorId, customization.name) then
+            ActivateInteriorEntitySet(Interior[interior].interiorId, customization.name)
+        end
+
+        if customization.color then
+            SetInteriorEntitySetColor(Interior[interior].interiorId, customization.name, customization.color)
+        end
+    end
+
+    RefreshInterior(Interior[interior].interiorId)
+
+    CurrentGarageName = data.garage
+    CurrentFloor = data.floor
+    InvitedPlayer = true
+
+    DoScreenFadeIn(500)
+    AwaitFadeIn()
+end)
+
 AddEventHandler('onResourceStart', function(resource)
     if cache.resource == resource then
         for i = 1, #General.PreviewModels do
@@ -560,6 +619,23 @@ AddEventHandler('onResourceStart', function(resource)
                 warn(('%s is not valid model or not part of your game build'):format(General.PreviewModels[i]))
             end
         end
+    end
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource == cache.resource then
+        if CurrentGarageName and InvitedPlayer then
+            TriggerServerEvent('uniq_garage:server:TeleportOut', CurrentGarageName)
+        end
+
+        if inPreview and CurrentGarageName then
+            if Interior[GaragesData[CurrentGarageName].interior].Customization and Interior[GaragesData[CurrentGarageName].interior].Customization.DeactivateInterior then
+                Interior[GaragesData[CurrentGarageName].interior].Customization.DeactivateInterior()
+            end
+        end
+
+        Garage.DeleteVehicles()
+        lib.hideTextUI()
     end
 end)
 

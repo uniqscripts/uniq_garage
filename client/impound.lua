@@ -1,8 +1,8 @@
 if not lib then return end
 
-local cfg = lib.load('config.impound')
+local cfg = lib.load 'config.impound'
 local Impound = { Points = {} }
-local Marker = lib.load('config.general').Markers.Impound
+local Marker = lib.load 'config.general'.Markers.Impound
 local hasTextUI
 local Edit = require 'edit_me'
 local LastVehicle

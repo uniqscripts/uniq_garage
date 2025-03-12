@@ -7,7 +7,7 @@ local utils = require 'server.functions'
 local Interior = lib.load 'config.interior'
 local Garages = {}
 local PlayerVehicles = {}
-local ClassList = lib.load('config.impound').ImpoundPrices
+local ClassList = lib.load 'config.impound'.ImpoundPrices
 lib.locale()
 
 
@@ -351,6 +351,74 @@ end)
 SetInterval(saveToDB, 600000)
 
 
+local Commands = lib.load 'config.server'.Commands
+
+if Commands.invite.enable then
+    lib.addCommand(Commands.invite.name, {
+        help = Commands.invite.help,
+        restricted = false
+    }, function(source, args, raw)
+        local data = lib.callback.await('uniq_garage:cb:GetGarageClient', source)
+
+        if not data.garage or not data.floor then
+            TriggerClientEvent('uniq_garage:Notify', source, locale('only_in_garage'), 'error')
+            return
+        end
+
+        if data.preview then
+            TriggerClientEvent('uniq_garage:Notify', source, locale('not_in_preview'), 'error')
+            return
+        end
+
+        local identifier = Framework.GetIdentifier(source)
+
+        if not Garages[identifier][data.garage] then
+            TriggerClientEvent('uniq_garage:Notify', source, locale('not_your_garage'), 'error')
+            return
+        end
+
+        local players = lib.getNearbyPlayers(GaragesData[data.garage].enter, 10.0, false)
+
+        if #players == 0 then
+            TriggerClientEvent('uniq_garage:Notify', source, locale('no_player_nearby'), 'error')
+            return
+        end
+
+        local options = {}
+
+        for i = 1, #players do
+            options[i] = { label = Framework.GetName(players[i].id), value = players[i].id }
+        end
+
+        TriggerClientEvent('uniq_garage:client:InvitePlayer', source, options, data)
+    end)
+end
+
+RegisterNetEvent('uniq_garage:server:InvitePlayer', function(target, data)
+    local src = source
+    local inviter = Framework.GetName(src)
+    local identifier = Framework.GetIdentifier(src)
+    local cb = lib.callback.await('uniq_garage:cb:SendInvite', target, inviter)
+
+    if cb == 'cancel' then
+        TriggerClientEvent('uniq_garage:Notify', src, locale('declined_invite'), 'info')
+        return
+    end
+
+    SetPlayerRoutingBucket(target, src)
+    TriggerClientEvent('uniq_garage:client:TeleportPlayer', target, Garages[identifier][data.garage].style?[data.floor] or {}, data)
+end)
+
+RegisterNetEvent('uniq_garage:server:TeleportOut', function(name)
+    local src = source
+    local ped = GetPlayerPed(src)
+    local coords = GaragesData[name].enter
+
+    SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, false)
+    SetPlayerRoutingBucket(src, 0)
+end)
+
+
 AddEventHandler('onResourceStop', function(resource)
     if resource == cache.resource then saveToDB() end
 end)
@@ -373,6 +441,5 @@ AddEventHandler('playerDropped', function()
 		saveToDB()
 	end
 end)
-
 
 lib.versionCheck('uniqscripts/uniq_garage')

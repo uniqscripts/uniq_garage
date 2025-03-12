@@ -25,5 +25,15 @@ function Framework.ClearMeta(playerId, key, val)
     end
 end
 
+function Framework.GetName(playerId)
+    local ply = Framework.Export.Functions.GetPlayer(playerId)
+
+    if ply then
+        return ('%s %s'):format(ply.PlayerData.charinfo.firstname, ply.PlayerData.charinfo.lastname)
+    end
+
+    return 'Unknown'
+end
+
 
 return Framework

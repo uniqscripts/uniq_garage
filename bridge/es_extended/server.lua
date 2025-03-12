@@ -24,4 +24,14 @@ function Framework.ClearMeta(playerId, key, val)
     end
 end
 
+function Framework.GetName(playerId)
+    local xPlayer = Framework.Export.GetPlayerFromId(playerId)
+
+    if xPlayer then
+        return xPlayer.getName()
+    end
+
+    return 'Unknown'
+end
+
 return Framework

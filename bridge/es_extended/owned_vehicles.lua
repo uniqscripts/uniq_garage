@@ -40,7 +40,7 @@ function db.UpdateStored(plate, identifier, stored)
 end
 
 
-local ImpoundList = lib.load('config.impound').Locations
+local ImpoundList = lib.load 'config.impound'.Locations
 local strtrim = string.strtrim
 
 local GetVehicleNumberPlateText = GetVehicleNumberPlateText

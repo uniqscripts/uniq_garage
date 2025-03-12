@@ -55,7 +55,7 @@ function db.UpdateStored(plate, identifier, stored)
     MySQL.update('UPDATE `player_vehicles` SET `state` = ? WHERE `plate` = ? AND `citizenid` = ?', { stored, plate, identifier })
 end
 
-local ImpoundList = lib.load('config.impound').Locations
+local ImpoundList = lib.load 'config.impound'.Locations
 local strtrim = string.strtrim
 
 local GetVehicleNumberPlateText = GetVehicleNumberPlateText

@@ -35,5 +35,15 @@
     "Acceleration": "Acceleration",
     "Braking": "Braking",
     "Traction": "Traction",
-    "impound": "Impound"
+    "impound": "Impound",
+    "not_your_garage": "This is not your garage",
+    "invite_title": "Garage Invite",
+    "invite_msg": "%s invited you to garage",
+    "accept": "Accept",
+    "decline": "Decline",
+    "select_player": "Select Player",
+    "declined_invite": "Player declined invite",
+    "only_in_garage": "You can invite only if you are in garage",
+    "not_in_preview": "Cant invite somebody in preview",
+    "no_player_nearby": "No players nearby entrance"
 }
