@@ -1,6 +1,6 @@
 if not lib then return end
 
-local Edit = require 'edit_me'
+local Edit = require 'edit_functions'
 local GaragesData = lib.load 'config.garages'
 local General = lib.load 'config.general'
 local Interior = lib.load 'config.interior'
@@ -268,6 +268,7 @@ function Garage.ExitGarage()
         end
 
         CurrentGarageName = nil
+        Edit.OnExitGarage()
     else
         Garage.CreateFloor(CurrentGarageName, GaragesData[CurrentGarageName].interior)
     end

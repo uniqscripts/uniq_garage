@@ -5,7 +5,7 @@ lib.locale()
 require(('bridge.%s.client'):format(Shared.framework))
 require 'client.impound'
 
-local Edit = require 'edit_me'
+local Edit = require 'edit_functions'
 local GaragesData = lib.load 'config.garages'
 local General = lib.load 'config.general'
 local Interior = lib.load 'config.interior'

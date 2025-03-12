@@ -4,7 +4,7 @@ local cfg = lib.load 'config.impound'
 local Impound = { Points = {} }
 local Marker = lib.load 'config.general'.Markers.Impound
 local hasTextUI
-local Edit = require 'edit_me'
+local Edit = require 'edit_functions'
 local LastVehicle
 local SpawnVehicle = require 'client.garage'.SpawnVehicle
 

@@ -20,7 +20,7 @@ server_scripts {
 client_script 'init.lua'
 
 files {
-	'edit_me.lua',
+	'edit_functions.lua',
 	'client/client.lua',
 	'server/server.lua',
 	'locales/*.json',

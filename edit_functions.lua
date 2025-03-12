@@ -28,6 +28,9 @@ function Edit.RemoveKeys(vehicle, plate)
     
 end
 
+function Edit.OnExitGarage()
+    -- myb weather?
+end
 
 RegisterNetEvent('uniq_garage:Notify', Edit.Notify)
 
