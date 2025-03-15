@@ -231,15 +231,15 @@ return {
                     { label = 'Lighting 9', name = 'lighting_option09', price = 150000, type = 'light' },
                 },
                 ['Signage'] = {
-                    { label = 'Lighting 1', name = 'numbering_style01_n1', price = 50000, type = 'signage' },
-                    { label = 'Lighting 2', name = 'numbering_style02_n1', price = 62000, type = 'signage' },
-                    { label = 'Lighting 3', name = 'numbering_style03_n1', price = 75000, type = 'signage' },
-                    { label = 'Lighting 4', name = 'numbering_style04_n1', price = 87500, type = 'signage' },
-                    { label = 'Lighting 5', name = 'numbering_style05_n1', price = 100000, type = 'signage' },
-                    { label = 'Lighting 6', name = 'numbering_style06_n1', price = 132000, type = 'signage' },
-                    { label = 'Lighting 7', name = 'numbering_style07_n1', price = 165000, type = 'signage' },
-                    { label = 'Lighting 8', name = 'numbering_style08_n1', price = 197000, type = 'signage' },
-                    { label = 'Lighting 9', name = 'numbering_style09_n1', price = 250000, type = 'signage' },
+                    { label = 'Signage 1', name = 'numbering_style01_n1', price = 50000, type = 'signage' },
+                    { label = 'Signage 2', name = 'numbering_style02_n1', price = 62000, type = 'signage' },
+                    { label = 'Signage 3', name = 'numbering_style03_n1', price = 75000, type = 'signage' },
+                    { label = 'Signage 4', name = 'numbering_style04_n1', price = 87500, type = 'signage' },
+                    { label = 'Signage 5', name = 'numbering_style05_n1', price = 100000, type = 'signage' },
+                    { label = 'Signage 6', name = 'numbering_style06_n1', price = 132000, type = 'signage' },
+                    { label = 'Signage 7', name = 'numbering_style07_n1', price = 165000, type = 'signage' },
+                    { label = 'Signage 8', name = 'numbering_style08_n1', price = 197000, type = 'signage' },
+                    { label = 'Signage 9', name = 'numbering_style09_n1', price = 250000, type = 'signage' },
                 }
             },
 
@@ -306,8 +306,8 @@ return {
         },
         Vehicles = {
             [1] = {
-                vec4(-173.663, -586.285, 135.591, 55.232),
-                vec4(-171.772, -581.433, 135.589, 96.429),
+                vec4(-174.061, -586.010, 135.294, 55.230),
+                vec4(-172.763, -581.448, 135.617, 93.340),
                 vec4(-174.008, -575.509, 135.591, 133.238),
                 vec4(-177.363, -572.505, 135.590, 153.034),
                 vec4(-182.227, -571.430, 135.590, 187.091),

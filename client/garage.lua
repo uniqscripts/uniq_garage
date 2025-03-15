@@ -119,7 +119,7 @@ function Garage.OpenGarageMenu(name, interior)
         title = name,
         options = doesOwn and {
             { title = locale("enter_garage_menu"), arrow = true, onSelect = function() Garage.EnterGarage(name, interior) end },
-            { title = locale("sell_garage"), arrow = true }
+            -- { title = locale("sell_garage"), arrow = true } TODO
         } or {
             { title = locale("preview_garage"), arrow = true, onSelect = function() Garage.PreviewGarage(name, interior) end },
             {
@@ -156,7 +156,7 @@ function Garage.GeneratePreviewCar(name, interior)
             end
 
             SetEntityInvincible(vehicle, true)
-            SetVehicleDoorsLocked(vehicle, 2)
+            -- SetVehicleDoorsLocked(vehicle, 2)
 
             TempVehicle[#TempVehicle + 1] = vehicle
         end
