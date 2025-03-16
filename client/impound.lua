@@ -23,10 +23,12 @@ local function FindFreeSpawn(index)
 end
 
 local function DeletePreview()
-    if LastVehicle then
-        DeleteEntity(LastVehicle)
-        LastVehicle = nil
+    while DoesEntityExist(LastVehicle) do
+        NetworkRequestControlOfEntity(LastVehicle)
+        DeleteVehicle(LastVehicle)
+        Wait(0)
     end
+    LastVehicle = nil
 end
 
 
@@ -48,7 +50,7 @@ function Impound.CreateImpoundList(index)
                 if IsModelInCdimage(vehicles[args.plate].model) then
                     local hash = lib.requestModel(vehicles[args.plate].model)
                     local coords = cfg.Locations[index].coords
-                    local vehicle = CreateVehicle(hash, coords.x, coords.y, coords.z, GetEntityHeading(cache.ped), false, false)
+                    local vehicle = CreateVehicle(hash, coords.x, coords.y, coords.z, GetEntityHeading(cache.ped), false, true)
 
                     FreezeEntityPosition(vehicle, true)
                     TaskWarpPedIntoVehicle(cache.ped, vehicle, -1)
