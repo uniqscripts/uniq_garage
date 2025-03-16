@@ -187,31 +187,33 @@ local function FindSlotByPlate(name, identifier, plate)
 end
 
 
-lib.callback.register('uniq_garage:cb:TakeVehicleOut', function(source, name, plate)
+lib.callback.register('uniq_garage:cb:CheckSpawnPoint', function(source, name, plate)
+    if #lib.getNearbyVehicles(GaragesData[name].vehicleSpawnPoint.xyz, 3.0, false) > 0 then
+        return false
+    end
+
+    return true
+end)
+
+
+RegisterNetEvent('uniq_garage:server:TakeVehicleOut', function(name, plate)
     plate = string.strtrim(plate)
     local src = source
     local identifier = Framework.GetIdentifier(src)
+    local floor, slot = FindSlotByPlate(name, identifier, plate)
 
-    if #lib.getNearbyVehicles(GaragesData[name].vehicleSpawnPoint.xyz, 3.0, false) == 0 then
-        local floor, slot = FindSlotByPlate(name, identifier, plate)
+    if not floor or not slot then return end
 
-        if not floor or not slot then return false, 'something_wrong' end
+    if Garages[identifier][name].slot[floor] and Garages[identifier][name].slot[floor][slot] then
+        SetPlayerRoutingBucket(src, 0)
+        Framework.ClearMeta(src, 'garage', nil)
 
-        if Garages[identifier][name].slot[floor] and Garages[identifier][name].slot[floor][slot] then
-            SetPlayerRoutingBucket(src, 0)
-            Framework.ClearMeta(src, 'garage', nil)
+        TriggerClientEvent('uniq_garage:client:TakeVehicleOut', src, name, PlayerVehicles[identifier][name][plate])
 
-            TriggerClientEvent('uniq_garage:client:TakeVehicleOut', src, name, PlayerVehicles[identifier][name][plate])
-
-            Garages[identifier][name].slot[floor][slot] = nil
-            PlayerVehicles[identifier][name][plate] = nil
-            db.UpdateStored(plate, identifier, 0)
-
-            return true
-        end
+        Garages[identifier][name].slot[floor][slot] = nil
+        PlayerVehicles[identifier][name][plate] = nil
+        db.UpdateStored(plate, identifier, 0)
     end
-
-    return false, 'no_free_spawnpoint'
 end)
 
 lib.callback.register('uniq_garage:cb:HasMoney', function(source, class)

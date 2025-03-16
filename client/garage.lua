@@ -499,7 +499,6 @@ RegisterNetEvent('uniq_garage:client:TakeVehicleOut', function(name, mods)
 
     DoScreenFadeOut(750)
     AwaitFadeOut()
-    Garage.DeleteVehicles()
 
     SetEntityCoords(cache.ped, coords.x, coords.y, coords.z, false, false, false, false)
 
@@ -521,15 +520,16 @@ local keybind = lib.addKeybind({
     defaultKey = 'E',
     onReleased = function(self)
         local plate = GetVehicleNumberPlateText(cache.vehicle)
-        local cb, msg = lib.callback.await('uniq_garage:cb:TakeVehicleOut', 100, CurrentGarageName, plate)
+        local freespot = lib.callback.await('uniq_garage:cb:CheckSpawnPoint', 100, CurrentGarageName)
 
-        if not cb then
-            return Edit.Notify(locale(msg), 'error')
+        if not freespot then
+            return Edit.Notify(locale('no_free_spawnpoint'), 'error')
         end
 
+        Garage.DeleteVehicles()
+        TriggerServerEvent('uniq_garage:server:TakeVehicleOut', CurrentGarageName, plate)
         CurrentFloor = 'exit'
         lib.hideTextUI()
-        TriggerServerEvent('uniq_garage:server:TakeVehicleOut', CurrentGarageName, plate)
         self:disable(true)
     end
 })
