@@ -1,4 +1,27 @@
 return {
+    ['Rancho Garage'] = {
+        type = 'car',
+        enter = vec3(224.345, -1872.465, 26.871),
+        parkVehicle = vec3(234.624, -1875.155, 26.461),
+        vehicleSpawnPoint = vec4(227.266, -1879.912, 26.128, 229.535),
+        price = 1750000,
+        blip = { id = 357, colour = 3, scale = 0.9 },
+        blackListClass = { 14, 15, 16, 19, 21 },
+        GarageInfo = 'Can store 10 vehicles',
+        interior = 'autoshop'
+    },
+    ['Vespucci Canals Agency Garage'] = {
+        type = 'car',
+        enter = vec3(-989.320, -767.753, 15.860),
+        parkVehicle = vec3(-985.589, -768.380, 15.889),
+        vehicleSpawnPoint = vec4(-986.758, -771.808, 16.050, 176.733),
+        price = 2000000,
+        blip = { id = 357, colour = 3, scale = 0.9 },
+        blackListClass = { 14, 15, 16, 19, 21 },
+        GarageInfo = 'Can store 24 vehicles',
+        interior = 'agency'
+    },
+
     ['LSIA Hangar 1'] = {
         type = 'air',
         enter = vec3(-1159.452, -3404.947, 13.945),

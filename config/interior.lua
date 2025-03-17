@@ -1,4 +1,249 @@
 return {
+    ['autoshop'] = {
+        interiorId = 285953,
+        insideSpawn = vec4(-1357.475, 152.179, -99.194, 357.259),
+        customizationMenu = vec3(-1347.294, 159.602, -99.194),
+        Vehicles = {
+            [1] = {
+                vec4(-1329.425, 156.265, -99.665, 180.294),
+                vec4(-1333.334, 156.395, -99.698, 179.724),
+                vec4(-1337.506, 156.044, -99.561, 179.536),
+                vec4(-1342.190, 155.810, -99.455, 181.386),
+                vec4(-1342.291, 142.635, -99.767, 358.853),
+                vec4(-1337.753, 142.599, -99.767, 358.436),
+                vec4(-1333.205, 142.648, -99.887, 0.871),
+                vec4(-1329.059, 142.627, -99.887, 359.965),
+                vec4(-1324.629, 143.047, -99.578, 359.584),
+                vec4(-1324.698, 149.480, -99.764, 88.756)
+            }
+        },
+        Customization = {
+            DeactivateInterior = function()
+                local interiorId = 285953
+                local list = {
+                    'entity_set_car_lift_purchase',
+                    'entity_set_box_clutter',
+                    'entity_set_chalkboard',
+                    'entity_set_bedroom',
+                    'entity_set_style_1',
+                    'entity_set_style_2',
+                    'entity_set_style_3',
+                    'entity_set_style_4',
+                    'entity_set_style_5',
+                    'entity_set_style_6',
+                    'entity_set_style_7',
+                    'entity_set_style_8',
+                    'entity_set_style_9',
+                    'entity_set_table',
+                    'entity_set_car_lift_cutscene',
+                    'entity_set_car_lift_default',
+                    'entity_set_cut_seats',
+                    'entity_set_laptop',
+                    'entity_set_cabinets',
+                    'entity_set_bedroom_empty',
+                    'entity_set_virus',
+                    'entity_set_scope',
+                    'entity_set_thermal',
+                    'entity_set_jammers',
+                    'entity_set_container',
+                    'entity_set_train',
+                    'entity_set_IAA',
+                    'entity_set_methLab',
+                    'entity_set_bombs',
+                    'entity_set_lightbox',
+                    'entity_set_tints',
+                    'entity_set_ecu',
+                    'entity_set_plate',
+                    'entity_set_drive',
+                    'entity_set_def_table',
+                }
+
+                for i = 1, #list do
+                    if IsInteriorEntitySetActive(interiorId, list[i]) then
+                        DeactivateInteriorEntitySet(interiorId, list[i])
+                    end
+                end
+
+                RefreshInterior(interiorId)
+            end,
+
+            LoadDefault = function()
+                local interiorId = 285953
+                local list = {
+                    { name = 'entity_set_style_1' },
+                    { name = 'entity_set_tints', color = 0 }
+                }
+
+                for i = 1, #list do
+                    if not IsInteriorEntitySetActive(interiorId, list[i].name) then
+                        ActivateInteriorEntitySet(interiorId, list[i].name)
+                    end
+
+                    if list[i].color then
+                        SetInteriorEntitySetColor(interiorId, list[i].name, list[i].color)
+                    end
+                end
+
+                RefreshInterior(interiorId)
+            end,
+
+            Purchasable = {
+                ['Garage Style'] = {
+                    { label = 'Undressed', name = 'entity_set_style_1', price = 250000, type = 'garage_style' },
+                    { label = 'Flawless', name = 'entity_set_style_2', price = 265000, type = 'garage_style' },
+                    { label = 'Polished', name = 'entity_set_style_3', price = 275000, type = 'garage_style' },
+                    { label = 'Concrete Chic', name = 'entity_set_style_4', price = 285000, type = 'garage_style' },
+                    { label = 'Nostalgia Trip', name = 'entity_set_style_5', price = 325000, type = 'garage_style' },
+                    { label = 'Route 68', name = 'entity_set_style_6', price = 340000, type = 'garage_style' },
+                    { label = 'Super Chibi', name = 'entity_set_style_7', price = 360000, type = 'garage_style' },
+                    { label = 'Wildstyle', name = 'entity_set_style_8', price = 425000, type = 'garage_style' },
+                    { label = 'Race and Chase', name = 'entity_set_style_9', price = 450000, type = 'garage_style' },
+                },
+                ['Tint'] = {
+                    { label = 'None', name = '', price = 187500, type = 'garage_tint' },
+                    { label = 'Yellow', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 0 },
+                    { label = 'White', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 1 },
+                    { label = 'Black', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 2 },
+                    { label = 'Green', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 3 },
+                    { label = 'Orange', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 4 },
+                    { label = 'Red', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 5 },
+                    { label = 'Pink', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 6 },
+                    { label = 'Blue', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 7 },
+                    { label = 'Purple', name = 'entity_set_tints', price = 187500, type = 'garage_tint', color = 8 },
+                },
+            }
+        }
+    },
+
+    ['agency'] = {
+        interiorId = 286721,
+        ipl = 'sf_int_placement_sec_interior_2_dlc_garage_sec_milo_',
+        insideSpawn = vec4(-1068.835, -84.989, -99.000, 92.062),
+        customizationMenu = vec3(-1072.931, -87.790, -98.998),
+        Vehicles = {
+            [1] = {
+                vec4(-1066.113, -81.196, -99.412, 89.527),
+                vec4(-1065.999, -76.719, -99.410, 88.172),
+                vec4(-1065.981, -72.445, -99.412, 88.687),
+                vec4(-1065.841, -68.539, -99.411, 88.255),
+                vec4(-1066.027, -64.435, -99.412, 86.482),
+                vec4(-1079.422, -67.896, -99.412, 269.571),
+                vec4(-1079.044, -72.257, -99.412, 270.097),
+                vec4(-1079.449, -76.726, -99.412, 269.210),
+                vec4(-1079.504, -81.031, -99.412, 268.147),
+                vec4(-1079.016, -85.502, -99.411, 270.234),
+                vec4(-1079.450, -85.448, -95.012, 269.469),
+                vec4(-1079.390, -80.989, -95.011, 269.330),
+                vec4(-1079.237, -76.856, -95.012, 268.235),
+                vec4(-1079.298, -72.716, -95.012, 269.385),
+                vec4(-1079.323, -68.137, -95.012, 270.108),
+                vec4(-1065.536, -64.028, -95.011, 90.670),
+                vec4(-1065.667, -68.856, -95.011, 88.375),
+                vec4(-1065.630, -72.794, -95.012, 88.877),
+                vec4(-1065.816, -76.874, -95.012, 89.108),
+                vec4(-1065.989, -81.113, -95.012, 89.960),
+                vec4(-1079.369, -68.234, -90.612, 270.378),
+                vec4(-1079.233, -72.387, -90.613, 272.098),
+                vec4(-1079.531, -76.779, -90.611, 268.497),
+                vec4(-1079.268, -80.878, -90.613, 272.066),
+                vec4(-1079.262, -84.888, -90.612, 268.589)
+            }
+        },
+        Customization = {
+            Default = {
+                [1] = {
+                    { name = 'entity_set_workshop_wall', type = 'wall' },
+                    { name = 'entity_set_art_1_nomod', type = 'no_mod_wall' },
+                    { name = 'entity_set_tints', type = 'tint', color = 1 }
+                }
+            },
+
+            DeactivateInterior = function()
+                local interiorId = 286721
+                local list = {
+                    'entity_set_workshop_wall',
+                    'entity_set_wallpaper_01',
+                    'entity_set_wallpaper_02',
+                    'entity_set_wallpaper_03',
+                    'entity_set_wallpaper_04',
+                    'entity_set_wallpaper_05',
+                    'entity_set_wallpaper_06',
+                    'entity_set_wallpaper_07',
+                    'entity_set_wallpaper_08',
+                    'entity_set_wallpaper_09',
+                    'entity_set_art_1',
+                    'entity_set_art_2',
+                    'entity_set_art_3',
+                    'entity_set_art_1_nomod',
+                    'entity_set_art_2_nomod',
+                    'entity_set_art_3_nomod',
+                    'entity_set_tints',
+                    'entity_set_workshop_lights',
+                }
+
+                for i = 1, #list do
+                    if IsInteriorEntitySetActive(interiorId, list[i]) then
+                        DeactivateInteriorEntitySet(interiorId, list[i])
+                    end
+                end
+
+                RefreshInterior(interiorId)
+            end,
+
+            LoadDefault = function()
+                local interiorId = 286721
+                local list = {
+                    { name = 'entity_set_workshop_wall', type = 'wall' },
+                }
+
+                for i = 1, #list do
+                    if not IsInteriorEntitySetActive(interiorId, list[i].name) then
+                        ActivateInteriorEntitySet(interiorId, list[i].name)
+                    end
+
+                    if list[i].color then
+                        SetInteriorEntitySetColor(interiorId, list[i].name, list[i].color)
+                    end
+                end
+
+                RefreshInterior(interiorId)
+            end,
+
+            Purchasable = {
+                ['Walls Color'] = {
+                    { label = 'None', name = '', price = 20000, type = 'wall_tint' },
+                    { label = 'Charcoal', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 0 },
+                    { label = 'Sage', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 1 },
+                    { label = 'Green', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 2 },
+                    { label = 'Gray', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 3 },
+                    { label = 'Purple', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 4 },
+                    { label = 'Red', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 5 },
+                    { label = 'Brown', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 6 },
+                    { label = 'Ash', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 7 },
+                    { label = 'Moss', name = 'entity_set_tints', price = 20000, type = 'wall_tint', color = 8 },
+                },
+                ['Wall Decoration'] = {
+                    { label = 'None', name = '', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 1', name = 'entity_set_wallpaper_01', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 2', name = 'entity_set_wallpaper_02', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 3', name = 'entity_set_wallpaper_03', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 4', name = 'entity_set_wallpaper_04', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 5', name = 'entity_set_wallpaper_05', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 6', name = 'entity_set_wallpaper_06', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 7', name = 'entity_set_wallpaper_07', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 8', name = 'entity_set_wallpaper_08', price = 20000, type = 'wall_decoration' },
+                    { label = 'Option 9', name = 'entity_set_wallpaper_09', price = 20000, type = 'wall_decoration' },
+                },
+                ['Wall Art'] = {
+                    { label = 'None', name = '', price = 20000, type = 'wall_art' },
+                    { label = 'Option 1', name = 'entity_set_art_1', price = 20000, type = 'wall_art' },
+                    { label = 'Option 2', name = 'entity_set_art_2', price = 20000, type = 'wall_art' },
+                    { label = 'Option 3', name = 'entity_set_art_3', price = 20000, type = 'wall_art' },
+                },
+            }
+        }
+    },
+
     ['hangar'] = {
         interiorId = 260353,
         ipl = 'sm_smugdlc_interior_placement_interior_0_smugdlc_int_01_milo_',
